@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
-import type { Theme } from "../types";
+
+import type { Theme } from "@/shared/types/theme";
 
 interface ThemeContextValue {
   theme: Theme;
@@ -31,16 +32,16 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   }
 
   useEffect(() => {
-    const root = document.documentElement;
-    if (isDark) {
-      root.classList.add("dark");
-    } else {
-      root.classList.remove("dark");
-    }
+  const root = document.documentElement;
+
+  root.classList.toggle("dark", isDark);
+  root.classList.toggle("light", !isDark);
+
+  root.style.backgroundColor =
+    getComputedStyle(root).getPropertyValue("--mv-bg");
+}, [isDark]);
   
-    Object.entries(vars).forEach(([k, v]) => root.style.setProperty(k, v));
-    root.style.backgroundColor = vars["--mv-bg"];
-  }, [isDark]);
+   
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme, isDark }}>

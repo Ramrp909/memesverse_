@@ -1,6 +1,5 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
-import type { User } from "../types";
-import { MOCK_USER } from "../mocks/data";
+import type { AuthContextType, User } from "@/shared/types/auth";
 
 interface AuthContextValue {
   user: User | null;
@@ -17,6 +16,11 @@ const AuthContext = createContext<AuthContextValue>({
 });
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+  const DEMO_USER: User = {
+  id: 1,
+  username: "Guest",
+  avatar: "/images/avatar-placeholder.png",
+};
   const [user, setUser] = useState<User | null>(null);
 
   function login(u: User) {
@@ -29,7 +33,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // For demo: expose mock login helper on window
   if (typeof window !== "undefined") {
-    (window as any).__mvLogin = () => login(MOCK_USER);
+    (window as any).__mvLogin = () => login(DEMO_USER);
   }
 
   return (
