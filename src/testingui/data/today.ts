@@ -1,0 +1,9 @@
+import type { Post } from "../types/post";
+export const TODAY: Post[] = [
+  { id: 1, type: "image", src: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=900&h=680&fit=crop&auto=format", caption: "My cat every morning at 5AM. Zero mercy, zero remorse.", views: 48320, likes: 14820, dislikes: 312 },
+  { id: 2, type: "video", src: "https://www.w3schools.com/html/mov_bbb.mp4", poster: "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=900&h=680&fit=crop&auto=format", caption: "Me trying to fix a bug at 2am vs the bug fixing itself after I restart.", views: 91205, likes: 28500, dislikes: 190 },
+  { id: 3, type: "image", src: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=900&h=680&fit=crop&auto=format", caption: "Friday 4:59pm. Deploy pipeline turns red. Team disappears.", views: 33100, likes: 9340, dislikes: 88 },
+  { id: 4, type: "video", src: "https://www.w3schools.com/html/movie.mp4", poster: "https://images.unsplash.com/photo-1517849845537-4d257902454a?w=900&h=680&fit=crop&auto=format", caption: "Dog explains microservices architecture better than any YouTube tutorial.", views: 72450, likes: 19200, dislikes: 450 },
+  { id: 5, type: "image", src: "https://images.unsplash.com/photo-1574158622682-e40e69881006?w=900&h=680&fit=crop&auto=format", caption: "Tabby judging your life choices from across the room. Not wrong though.", views: 29800, likes: 11340, dislikes: 204 },
+  { id: 6, type: "image", src: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=900&h=680&fit=crop&auto=format", caption: "Senior dev energy: says nothing in standup, fixes everything in prod.", views: 41200, likes: 15600, dislikes: 140 },
+];

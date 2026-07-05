@@ -1,6 +1,5 @@
 @custom-variant dark (&:is(.dark *));
 
-
 :root {
   --font-size: 16px;
   --background: #08090e;
@@ -77,45 +76,6 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(0.269 0 0);
   --sidebar-ring: oklch(0.439 0 0);
-  --mv-bg: #08090e;
-          --mv-card: #0f1018;
-          --mv-card-el: #181926;
-          --mv-border: rgba(255,255,255,0.07);
-          --mv-border-sub: rgba(255,255,255,0.04);
-          --mv-text:#e8e8f2;
-          --mv-text-mid: rgba(232,232,242,0.65);
-          --mv-text-muted: #5c5d7a;
-          --mv-text-dim: #2e2f46;
-          --mv-btn-bg : rgba(255,255,255,0.05);
-          --mv-btn-text:rgba(255,255,255,0.45);
-          --mv-input-bg: rgba(255,255,255,0.04);
-          --mv-input-bdr: rgba(255,255,255,0.08);
-          --mv-chip-bg: #13141f;
-          --mv-chip-text: #818cf8;
-          --mv-hdr: rgba(8,9,14,0.92);
-          --mv-modal-bg: rgba(8,9,14,0.88);
-          --mv-overlay: rgba(8,9,14,0.92)
-}
-
-.light {
---mv-bg: #f2f2f7;
-          --mv-card:#ffffff;
-          --mv-card-el: #f8f8fc;
-          --mv-border: rgba(0,0,0,0.08);
-          --mv-border-sub: rgba(0,0,0,0.05);
-          --mv-text: #111118;
-          --mv-text-mid: rgba(17,17,24,0.65);
-          --mv-text-muted: #7777aa;
-          --mv-text-dim: #b0b0c8;
-          --mv-btn-bg: rgba(0,0,0,0.05);
-          --mv-btn-text: rgba(0,0,0,0.5);
-        --mv-input-bg: rgba(0,0,0,0.04);
-          --mv-input-bdr: rgba(0,0,0,0.09);
-          --mv-chip-bg: #e8e8f5;
-          --mv-chip-text: #6366f1;
-          --mv-hdr: rgba(242,242,247,0.92);
-          --mv-modal-bg: rgba(200,200,220,0.7);
-          --mv-overlay: rgba(240,240,248,0.92);
 }
 
 @theme inline {

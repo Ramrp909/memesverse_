@@ -31,7 +31,7 @@ export function VideoPlayer({ src, poster, small = false }: Props) {
   return (
     <div
       ref={containerRef}
-      style={{ position: "relative", width: "100%", aspectRatio: fullscreen ? undefined : "16/9", height: fullscreen ? "100dvh" : undefined, background: "#000", userSelect: "none" }}
+      style={{ position: "relative", width: "100%", aspectRatio: fullscreen ? undefined : "16/9", height: fullscreen ? "100dvh" : undefined, background: "#000", userSelect: "none", borderRadius: small ? 10 : 12, overflow: "hidden" }}
       onMouseMove={revealControls}
       onMouseLeave={() => playing && setTimeout(() => {}, 0)}
     >

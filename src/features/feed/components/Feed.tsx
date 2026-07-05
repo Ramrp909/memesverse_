@@ -88,16 +88,16 @@ export function Feed({
     // </main>
     <main
   style={{
-    maxWidth: 512,
+    maxWidth: 560,
     margin: "0 auto",
-    padding: "16px 12px 96px",
+    padding: "14px 12px 96px",
   }}
 >
   <div
     style={{
       display: "flex",
       flexDirection: "column",
-      gap: 12,
+      gap: 14,
     }}
   >
     {sections.map((section) => (

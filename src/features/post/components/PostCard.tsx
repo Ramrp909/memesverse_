@@ -18,11 +18,11 @@ export function PostCard({ post, index, total, onOpenDetail, onAuthRequired, onS
   const [imgHovered, setImgHovered] = useState(false);
 
   return (
-    <article style={{ background: "var(--mv-card)", border: "1px solid var(--mv-border)", borderRadius: 12, overflow: "hidden", transition: "box-shadow 200ms" }}>
+    <article style={{ background: "var(--mv-card)", border: "1px solid var(--mv-border)", borderRadius: 16, overflow: "hidden", transition: "box-shadow 200ms, transform 200ms", boxShadow: "0 10px 30px rgba(0,0,0,0.14)" }}>
       {/* Header strip */}
       <div
         onClick={() => onOpenDetail?.(post)}
-        style={{ padding: "10px 16px", borderBottom: "1px solid var(--mv-border-sub)", display: "flex", alignItems: "center", justifyContent: "space-between", cursor: "pointer" }}
+        style={{ padding: "10px 14px", borderBottom: "1px solid var(--mv-border-sub)", display: "flex", alignItems: "center", justifyContent: "space-between", cursor: "pointer", background: "rgba(255,255,255,0.01)" }}
       >
         <span style={{ fontFamily: "'Onest', sans-serif", fontWeight: 700, fontSize: 10, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--mv-text-dim)" }}>
           {String(index).padStart(2, "0")} / {String(total).padStart(2, "0")}
@@ -70,7 +70,7 @@ export function PostCard({ post, index, total, onOpenDetail, onAuthRequired, onS
       </div>
 
       {/* Actions */}
-      <div style={{ padding: "10px 12px" }}>
+      <div style={{ padding: "10px 12px 12px" }}>
         <PostActions
           post={post}
           onComment={() => onOpenDetail?.(post)}
