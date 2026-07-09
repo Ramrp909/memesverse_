@@ -1,133 +1,149 @@
-import { useState, useEffect, useRef, useCallback, useMemo} from "react";
-import { PostCard } from "@/features/post/components/PostCard";
-import { DateDivider } from "./DateDivider";
-import type { FeedGroup } from "../utils/groupFeedByDate";
+"use client";
+
+import type { RefObject } from "react";
+
+import PostCard  from "@/features/post/components/PostCard";
+import DateDivider from "./DateDivider";
+
+import type { FeedGroup, FeedItem } from "../types/feed.model";
 
 interface FeedProps {
   groupedPosts: FeedGroup[];
-  onOpenDetail?: (...args: any[]) => void;
+
+  loading?: boolean;
+  hasMore?: boolean;
+
+  sentinelRef?: RefObject<HTMLDivElement | null>;
+
+  onOpenDetail?: (post: FeedItem) => void;
   onAuthRequired?: () => void;
-  onShare?: (...args: any[]) => void;
+  onShare?: (post: FeedItem) => void;
 }
 
 export function Feed({
   groupedPosts,
+  loading = false,
+  hasMore = false,
+  sentinelRef,
   onOpenDetail,
   onAuthRequired,
   onShare,
 }: FeedProps) {
-  const sections = useMemo(() => groupedPosts, [groupedPosts]);
+  const todayGroup = groupedPosts[0];
+  const archiveGroups = groupedPosts.slice(1);
+
   return (
-    // <main style={{ maxWidth: 512, margin: "0 auto", padding: "16px 12px 96px" }}>
-    //   <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-    //     {/* Today section */}
-    //     <DateDivider label="TODAY" meta={`${TODAY_DROP.date} · ${TODAY_DROP.posts.length} posts`} />
-    //     {TODAY_DROP.posts.map((post, i) => (
-    //       <PostCard
-    //         key={post.id}
-    //         post={post}
-    //         index={i + 1}
-    //         total={TODAY_DROP.posts.length}
-    //         onOpenDetail={onOpenDetail}
-    //         onAuthRequired={onAuthRequired}
-    //         onShare={onShare}
-    //       />
-    //     ))}
+    <main className="space-y-3 px-3 pt-4 pb-24 sm:px-4">
+      {/* Today */}
+      {todayGroup && (
+        <>
+          <div className="flex items-center gap-3">
+            <div
+              className="flex-1 h-px"
+              style={{
+                background: "var(--mv-border-subtle)",
+              }}
+            />
 
-    //     {/* End of today */}
-    //     <div style={{ textAlign: "center", padding: "12px 0", fontFamily: "'Onest', sans-serif", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--mv-text-dim)" }}>
-    //       — end of today · scroll for previous drops —
-    //     </div>
+            <div className="text-center">
+              <p
+                className="text-sm font-black uppercase"
+                style={{
+                  fontFamily: "'Onest', sans-serif",
+                  letterSpacing: "-0.01em",
+                  color: "var(--mv-text)",
+                }}
+              >
+                {todayGroup.label}
+              </p>
 
-    //     {/* Archive */}
-    //     {loadedDays.map(day => (
-    //       <div key={day.date} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-    //         <DateDivider label={day.label} meta={`${day.date} · ${day.posts.length} posts`} />
-    //         {day.posts.map((post, i) => (
-    //           <PostCard
-    //             key={post.id}
-    //             post={post}
-    //             index={i + 1}
-    //             total={day.posts.length}
-    //             onOpenDetail={onOpenDetail}
-    //             onAuthRequired={onAuthRequired}
-    //             onShare={onShare}
-    //           />
-    //         ))}
-    //       </div>
-    //     ))}
+              <p
+                className="text-[10px] font-bold uppercase tracking-wider"
+                style={{
+                  fontFamily: "'Onest', sans-serif",
+                  color: "var(--mv-text-dim)",
+                }}
+              >
+                {todayGroup.date} · {todayGroup.posts.length} posts
+              </p>
+            </div>
 
-    //     {/* Loading spinner */}
-    //     {loading && (
-    //       <div style={{ display: "flex", justifyContent: "center", padding: "24px 0" }}>
-    //         <div style={{
-    //           width: 20, height: 20, border: "2px solid #6366f1",
-    //           borderTopColor: "transparent", borderRadius: "50%",
-    //           animation: "spin 1s linear infinite",
-    //         }} />
-    //       </div>
-    //     )}
+            <div
+              className="flex-1 h-px"
+              style={{
+                background: "var(--mv-border-subtle)",
+              }}
+            />
+          </div>
 
-    //     {/* End of history */}
-    //     {allLoaded && (
-    //       <div style={{ textAlign: "center", padding: "32px 0", fontFamily: "'Onest', sans-serif", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--mv-text-dim)" }}>
-    //         Beginning of history
-    //       </div>
-    //     )}
+          {todayGroup.posts.map((post, index) => (
+            <PostCard
+              key={post.id}
+              post={post}
+              index={index}
+              total={todayGroup.posts.length}
+              onOpenDetail={() => onOpenDetail?.(post)}
+              onAuthRequired={onAuthRequired}
+              onShare={() => onShare?.(post)}
+            />
+          ))}
 
-    //     {/* Scroll sentinel */}
-    //     <div ref={bottomRef} style={{ height: 1 }} />
-    //   </div>
+          <p
+            className="py-3 text-center text-[10px] font-bold uppercase tracking-widest"
+            style={{
+              fontFamily: "'Onest', sans-serif",
+              color: "var(--mv-text-dim)",
+            }}
+          >
+            — end of today · scroll for previous drops —
+          </p>
+        </>
+      )}
 
-    //   <style>{`
-    //     @keyframes spin { to { transform: rotate(360deg); } }
-    //     .hidden { display: none; }
-    //     @media (min-width: 640px) { .sm\\:flex { display: flex !important; } .sm\\:block { display: block !important; } .sm\\:max-w-sm { max-width: 384px; } .sm\\:mb-8 { margin-bottom: 32px; } .sm\\:rounded-2xl { border-radius: 16px !important; } }
-    //     @media (min-width: 768px) { .md\\:flex-row { flex-direction: row !important; } .md\\:flex-\\[3\\] { flex: 3 !important; } .md\\:flex-\\[2\\] { flex: 2 !important; } .md\\:max-w-\\[980px\\] { max-width: 980px; } .md\\:max-h-\\[90vh\\] { max-height: 90vh; } .md\\:rounded-2xl { border-radius: 16px !important; } .md\\:h-auto { height: auto !important; } .md\\:border-t-0 { border-top: none !important; } .md\\:border-l { border-left: 1px solid var(--mv-border-sub) !important; } .md\\:hidden { display: none !important; } }
-    //   `}</style>
-    // </main>
-    <main
-  style={{
-    maxWidth: 560,
-    margin: "0 auto",
-    padding: "14px 12px 96px",
-  }}
->
-  <div
-    style={{
-      display: "flex",
-      flexDirection: "column",
-      gap: 14,
-    }}
-  >
-    {sections.map((section) => (
-      <div
-        key={section.title}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 12,
-        }}
-      >
-        <DateDivider
-          label={section.title.toUpperCase()}
-          meta={`${section.posts.length} posts`}
-        />
+      {/* Previous Days */}
+      {archiveGroups.map((group) => (
+        <div key={group.date} className="space-y-3">
+          <DateDivider day={group} />
 
-        {section.posts.map((post, index) => (
-          <PostCard
-            key={post.id}
-            post={post}
-            index={index + 1}
-            total={section.posts.length}
-            onOpenDetail={onOpenDetail}
-            onAuthRequired={onAuthRequired}
-            onShare={onShare}
+          {group.posts.map((post, index) => (
+            <PostCard
+              key={`${group.date}-${post.id}`}
+              post={post}
+              index={index}
+              total={group.posts.length}
+              onOpenDetail={() => onOpenDetail?.(post)}
+              onAuthRequired={onAuthRequired}
+              onShare={() => onShare?.(post)}
+            />
+          ))}
+        </div>
+      ))}
+
+      {/* Infinite Scroll Sentinel */}
+      <div ref={sentinelRef} />
+
+      {/* Loading / End */}
+      {loading ? (
+        <div className="flex justify-center py-6">
+          <div
+            className="h-5 w-5 animate-spin rounded-full border-2 border-t-transparent"
+            style={{
+              borderColor: "#6366f1",
+              borderTopColor: "transparent",
+            }}
           />
-        ))}
-      </div>
-    ))}
-  </div>
-</main>
+        </div>
+      ) : !hasMore ? (
+        <p
+          className="py-8 text-center text-[10px] font-bold uppercase tracking-widest"
+          style={{
+            fontFamily: "'Onest', sans-serif",
+            color: "var(--mv-text-dim)",
+          }}
+        >
+          Beginning of history
+        </p>
+      ) : null}
+    </main>
   );
 }

@@ -1,9 +1,4 @@
-import { FeedItem } from "../types/feed.model";
-
-export interface FeedGroup {
-  title: string;
-  posts: FeedItem[];
-}
+import type { FeedGroup, FeedItem } from "../types/feed.model";
 
 export function groupFeedByDate(posts: FeedItem[]): FeedGroup[] {
   const grouped = new Map<string, FeedItem[]>();
@@ -12,20 +7,21 @@ export function groupFeedByDate(posts: FeedItem[]): FeedGroup[] {
   today.setHours(0, 0, 0, 0);
 
   posts.forEach((post) => {
-    const date = new Date(post.createdAt);
-    date.setHours(0, 0, 0, 0);
+    const postDate = new Date(post.createdAt);
+    postDate.setHours(0, 0, 0, 0);
 
     const diff =
-      (today.getTime() - date.getTime()) / (1000 * 60 * 60 * 24);
+      (today.getTime() - postDate.getTime()) /
+      (1000 * 60 * 60 * 24);
 
-    let label = "";
+    let label: string;
 
     if (diff === 0) {
       label = "Today";
     } else if (diff === 1) {
       label = "Yesterday";
     } else {
-      label = date.toLocaleDateString("en-US", {
+      label = postDate.toLocaleDateString("en-US", {
         month: "long",
         day: "numeric",
         year: "numeric",
@@ -39,8 +35,21 @@ export function groupFeedByDate(posts: FeedItem[]): FeedGroup[] {
     grouped.get(label)!.push(post);
   });
 
-  return Array.from(grouped.entries()).map(([title, posts]) => ({
-    title,
-    posts,
-  }));
+  return Array.from(grouped.entries()).map(([label, posts]) => {
+    const firstPost = posts[0];
+
+    return {
+      label,
+
+      date: firstPost.createdAt.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      }),
+
+      dropTime: "00:00 UTC",
+
+      posts,
+    };
+  });
 }

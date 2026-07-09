@@ -3,21 +3,21 @@ interface Props {
   meta?: string;
 }
 
-export function DateDivider({ label, meta }: Props) {
+import type { DayDrop } from "../types/feed.model";
+
+export default function DateDivider({ day }: { day: DayDrop }) {
+ 
+ 
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "6px 0 2px" }}>
-      <div style={{ flex: 1, height: 1, background: "var(--mv-border-sub)" }} />
-      <div style={{ textAlign: "center", flexShrink: 0 }}>
-        <div style={{ fontFamily: "'Onest', sans-serif", fontWeight: 700, fontSize: 13, textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--mv-text)" }}>
-          {label}
-        </div>
-        {meta && (
-          <div style={{ fontFamily: "'Onest', sans-serif", fontWeight: 600, fontSize: 10, textTransform: "uppercase", letterSpacing: "0.16em", color: "var(--mv-text-dim)", marginTop: 2 }}>
-            {meta}
-          </div>
-        )}
+    <div className="flex items-center gap-3 py-1">
+      <div className="flex-1 h-px" style={{ background:"var(--mv-border-subtle)" }} />
+      <div className="text-center">
+        <p className="text-sm font-black uppercase" style={{ fontFamily: "'Onest',sans-serif", letterSpacing: "-0.01em", color:"var(--mv-text)"}}>{day.label}</p>
+        <p className="text-[10px] font-bold uppercase tracking-wider" style={{ fontFamily: "'Onest',sans-serif",color:"var(--mv-text-dim)" }}>
+          {day.date} · {day.dropTime} · {day.posts.length} posts
+        </p>
       </div>
-      <div style={{ flex: 1, height: 1, background: "var(--mv-border-sub)" }} />
+      <div className="flex-1 h-px" style={{ background:"var(--mv-border-subtle)" }} />
     </div>
   );
 }

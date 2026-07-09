@@ -1,42 +1,68 @@
+"use client";
 
+import { useEffect, useState } from "react";
 import { padTwo } from "@/shared/utils/number";
-import { useState, useEffect } from "react";
 
+export interface CountdownTime {
+  hours: number;
+  minutes: number;
+  seconds: number;
+
+  hh: string;
+  mm: string;
+  ss: string;
+}
 
 function getNextMidnightUTC(): number {
   const now = new Date();
-  const nextMidnight = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1));
-  return nextMidnight.getTime();
+
+  return Date.UTC(
+    now.getUTCFullYear(),
+    now.getUTCMonth(),
+    now.getUTCDate() + 1,
+    0,
+    0,
+    0,
+    0
+  );
 }
 
-export function useCountdown() {
-//   const [hh, setHh] = useState("00");
-//   const [mm, setMm] = useState("00");
-//   const [ss, setSs] = useState("00");
-const [time, setTime] = useState({
-  hh: "00",
-  mm: "00",
-  ss: "00",
-});
+export function useCountdown(): CountdownTime {
+  const [time, setTime] = useState<CountdownTime>({
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+    hh: "00",
+    mm: "00",
+    ss: "00",
+  });
 
   useEffect(() => {
-    const target = getNextMidnightUTC();
-
     function tick() {
-      const diff = Math.max(0, Math.floor((target - Date.now()) / 1000));
-      const h = Math.floor(diff / 3600);
-      const m = Math.floor((diff % 3600) / 60);
-      const s = diff % 60;
+      const diff = Math.max(
+        0,
+        Math.floor((getNextMidnightUTC() - Date.now()) / 1000)
+      );
+
+      const hours = Math.floor(diff / 3600);
+      const minutes = Math.floor((diff % 3600) / 60);
+      const seconds = diff % 60;
+
       setTime({
-  hh: padTwo(h),
-  mm: padTwo(m),
-  ss: padTwo(s),
-});
+        hours,
+        minutes,
+        seconds,
+        hh: padTwo(hours),
+        mm: padTwo(minutes),
+        ss: padTwo(seconds),
+      });
     }
 
     tick();
-    const id = setInterval(tick, 1000);
-    return () => clearInterval(id);
+
+    const interval = window.setInterval(tick, 1000);
+
+    return () => window.clearInterval(interval);
   }, []);
 
   return time;

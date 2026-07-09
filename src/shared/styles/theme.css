@@ -39,6 +39,28 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+   /* MemeVerse Tokens */
+  --mv-bg: #f2f2f7;
+  --mv-header: rgba(242,242,247,.92);
+
+  --mv-card: #ffffff;
+  --mv-card-elevated: #f8f8fc;
+
+  --mv-text: #111118;
+  --mv-text-muted: #7777aa;
+  --mv-text-dim: #b0b0c8;
+
+  --mv-border: rgba(0,0,0,.08);
+  --mv-border-subtle: rgba(0,0,0,.05);
+
+  --mv-button-bg: rgba(0,0,0,.05);
+  --mv-button-text: rgba(0,0,0,.5);
+
+  --mv-chip-bg: #e8e8f5;
+  --mv-chip-text: #6366f1;
+
+  --mv-primary: #6366f1;
 }
 
 .dark {
@@ -76,6 +98,26 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(0.269 0 0);
   --sidebar-ring: oklch(0.439 0 0);
+  --mv-bg:#08090e;
+  --mv-header:rgba(8,9,14,.92);
+
+  --mv-card:#0f1018;
+  --mv-card-elevated:#181926;
+
+  --mv-text:#e8e8f2;
+  --mv-text-muted:#5c5d7a;
+  --mv-text-dim:#2e2f46;
+
+  --mv-border:rgba(255,255,255,.07);
+  --mv-border-subtle:rgba(255,255,255,.04);
+
+  --mv-button-bg:rgba(255,255,255,.05);
+  --mv-button-text:rgba(255,255,255,.45);
+
+  --mv-chip-bg:#13141f;
+  --mv-chip-text:#818cf8;
+
+  --mv-primary:#6366f1;
 }
 
 @theme inline {

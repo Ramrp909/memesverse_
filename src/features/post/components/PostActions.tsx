@@ -1,97 +1,216 @@
-import { useMemo, useState } from "react";
-import { ThumbsUp, ThumbsDown, MessageCircle, Eye, Share2, Lock } from "lucide-react";
-import type { CSSProperties } from "react";
+
+"use client";
+
+import { useState } from "react";
+import {
+  Eye,
+  Lock,
+  MessageCircle,
+  Share2,
+  ThumbsDown,
+  ThumbsUp,
+} from "lucide-react";
 
 import type { FeedItem } from "@/features/feed/types/feed.model";
+import { formatNumber } from "@/shared/utils/number";
 
-interface Props {
+interface PostActionsProps {
   post: FeedItem;
-  size?: "sm" | "lg";
-  onComment?: () => void;
+  isLoggedIn?: boolean;
+
   onAuthRequired?: () => void;
+  onOpenDetail?: () => void;
   onShare?: () => void;
 }
 
-export function PostActions({ post, size = "sm", onComment, onAuthRequired, onShare }: Props) {
-  const isLoggedIn = false;
+export default function PostActions({
+  post,
+  isLoggedIn = false,
+  onAuthRequired,
+  onOpenDetail,
+  onShare,
+}: PostActionsProps) {
   const [liked, setLiked] = useState(false);
   const [disliked, setDisliked] = useState(false);
   const [likes, setLikes] = useState(post.likes);
-  const [dislikes, setDislikes] = useState(0);
-
-  const formatNumber = (value: number) =>
-  new Intl.NumberFormat().format(value);
-
-  const commentCount = useMemo(() => Math.max(1, Math.floor(post.views / 16000)), [post.views]);
-
-  const px = size === "lg" ? "px-3 py-2" : "px-2.5 py-1.5";
-  const iconSize = 13;
-  const fontSize = 12;
 
   function handleLike() {
-    if (!isLoggedIn) { onAuthRequired?.(); return; }
-    if (liked) { setLiked(false); setLikes(l => l - 1); }
-    else { setLiked(true); setLikes(l => l + 1); if (disliked) { setDisliked(false); setDislikes(d => d - 1); } }
+    if (!isLoggedIn) {
+      onAuthRequired?.();
+      return;
+    }
+
+    if (liked) {
+      setLiked(false);
+      setLikes((v) => v - 1);
+    } else {
+      setLiked(true);
+      setLikes((v) => v + 1);
+
+      if (disliked) {
+        setDisliked(false);
+      }
+    }
   }
 
   function handleDislike() {
-    if (!isLoggedIn) { onAuthRequired?.(); return; }
-    if (disliked) { setDisliked(false); setDislikes(d => d - 1); }
-    else { setDisliked(true); setDislikes(d => d + 1); if (liked) { setLiked(false); setLikes(l => l - 1); } }
-  }
-
-  async function handleShare() {
-    if (typeof window !== "undefined" && navigator.clipboard) {
-      await navigator.clipboard.writeText(window.location.href);
+    if (!isLoggedIn) {
+      onAuthRequired?.();
+      return;
     }
-    onShare?.();
-  }
 
-  const btnStyle = (active: boolean, activeColor?: string): CSSProperties => ({
-    display: "flex", alignItems: "center", gap: 6,
-    padding: size === "lg" ? "8px 12px" : "6px 10px",
-    background: active ? (activeColor ?? "#6366f1") : "var(--mv-btn-bg)",
-    color: active ? "white" : "var(--mv-btn-text)",
-    border: "1px solid transparent", borderRadius: 10, cursor: "pointer",
-    fontFamily: "'DM Sans', sans-serif", fontWeight: 600, fontSize,
-    transition: "all 200ms",
-    flexShrink: 0,
-    boxShadow: active ? "0 8px 18px rgba(99,102,241,0.22)" : "none",
-  });
+    if (disliked) {
+      setDisliked(false);
+      return;
+    }
+
+    setDisliked(true);
+
+    if (liked) {
+      setLiked(false);
+      setLikes((v) => v - 1);
+    }
+  }
 
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, overflow: "hidden", paddingTop: 2 }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 4, overflow: "hidden" }}>
-        {/* Like */}
-        <button style={btnStyle(liked)} onClick={handleLike}>
-          <ThumbsUp size={iconSize} fill={liked ? "white" : "none"} />
-          {formatNumber(likes)}
-          {!isLoggedIn && <Lock size={9} style={{ opacity: 0.4 }} />}
+    <div className="flex items-center justify-between gap-2 px-3 py-2.5 min-w-0">
+      <div className="flex items-center gap-1 min-w-0 overflow-hidden">
+
+        <button
+          onClick={handleLike}
+          className="flex flex-shrink-0 items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-semibold transition-all"
+          style={{
+            fontFamily: "'DM Sans', sans-serif",
+            background: liked
+              ? "#6366f1"
+              : "var(--mv-button-bg)",
+            color: liked
+              ? "#fff"
+              : "var(--mv-button-text)",
+          }}
+        >
+          <ThumbsUp
+            size={13}
+            fill={liked ? "white" : "none"}
+          />
+
+          <span>{formatNumber(likes)}</span>
+
+          {!isLoggedIn && (
+            <Lock
+              size={9}
+              className="opacity-40"
+            />
+          )}
         </button>
-        {/* Dislike */}
-        <button style={btnStyle(disliked, "var(--mv-card-el)")} onClick={handleDislike}>
-          <ThumbsDown size={iconSize} fill={disliked ? "currentColor" : "none"} />
-          {formatNumber(dislikes)}
-          {!isLoggedIn && <Lock size={9} style={{ opacity: 0.4 }} />}
+
+        <button
+          onClick={handleDislike}
+          className="flex flex-shrink-0 items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-semibold transition-all"
+          style={{
+            fontFamily: "'DM Sans', sans-serif",
+            background: disliked
+              ? "var(--mv-card-elevated)"
+              : "var(--mv-button-bg)",
+            color: disliked
+              ? "var(--mv-text)"
+              : "var(--mv-button-text)",
+          }}
+        >
+          <ThumbsDown
+            size={13}
+            fill={disliked ? "currentColor" : "none"}
+          />
+
+          {!isLoggedIn && (
+            <Lock
+              size={9}
+              className="opacity-40"
+            />
+          )}
         </button>
-        {/* Comment */}
-        {onComment && (
-          <button style={btnStyle(false)} onClick={onComment}>
-            <MessageCircle size={iconSize} />
-            {commentCount}
-          </button>
-        )}
-        {/* Views */}
-        <span style={{ display: "flex", alignItems: "center", gap: 4, padding: "0 6px", fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: "var(--mv-text-dim)", flexShrink: 0 }}
-          className="hidden sm:flex">
-          <Eye size={11} /> {formatNumber(post.views)}
-        </span>
+
+        <button
+          onClick={onOpenDetail}
+          className="flex flex-shrink-0 items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-semibold transition-all"
+          style={{
+            fontFamily: "'DM Sans', sans-serif",
+            background: "var(--mv-button-bg)",
+            color: "var(--mv-button-text)",
+          }}
+        >
+          <MessageCircle size={13} />
+
+          <span>12</span>
+        </button>
+
+        <div
+          className="flex flex-shrink-0 items-center gap-1 px-1.5 text-xs"
+          style={{
+            fontFamily: "'DM Sans', sans-serif",
+            color: "var(--mv-text-dim)",
+          }}
+        >
+          <Eye size={11} />
+
+          <span className="hidden xs:inline">
+            {formatNumber(post.views)}
+          </span>
+        </div>
       </div>
 
-      {/* Share */}
-      <button style={{ ...btnStyle(false), flexShrink: 0 }} onClick={handleShare}>
-        <Share2 size={iconSize} /> Share
+      <button
+        onClick={onShare}
+        className="flex flex-shrink-0 items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all"
+        style={{
+          fontFamily: "'DM Sans', sans-serif",
+          background: "var(--mv-button-bg)",
+          color: "var(--mv-button-text)",
+        }}
+      >
+        <Share2 size={13} />
+
+        <span>Share</span>
       </button>
     </div>
   );
 }
+ {/* actions — two groups, never wrap */}
+      // <div className="px-3 py-2.5 flex items-center justify-between gap-2 min-w-0">
+      //   {/* left: like · dislike · comments · views */}
+      //   <div className="flex items-center gap-1 min-w-0 overflow-hidden">
+      //     <button onClick={handleLike}
+      //       className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all flex-shrink-0"
+      //       style={{ fontFamily: B2, background: liked ? "#6366f1" : c.btnBg, color: liked ? "white" : c.btnText }}>
+      //       <ThumbsUp size={13} fill={liked ? "white" : "none"} />
+      //       <span>{fmtNum(localLikes)}</span>
+      //       {!isLoggedIn && <Lock size={9} className="opacity-40" />}
+      //     </button>
+
+      //     <button onClick={handleDislike}
+      //       className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all flex-shrink-0"
+      //       style={{ fontFamily: B2, background: disliked ? c.cardEl : c.btnBg, color: disliked ? c.text : c.btnText }}>
+      //       <ThumbsDown size={13} fill={disliked ? "currentColor" : "none"} />
+      //       {!isLoggedIn && <Lock size={9} className="opacity-40" />}
+      //     </button>
+
+      //     <button onClick={onOpenDetail}
+      //       className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all flex-shrink-0"
+      //       style={{ fontFamily: B2, background: c.btnBg, color: c.btnText }}>
+      //       <MessageCircle size={13} />
+      //       <span>{DUMMY_COMMENTS.length}</span>
+      //     </button>
+
+      //     <div className="flex items-center gap-1 px-1.5 text-xs flex-shrink-0" style={{ fontFamily: B2, color: c.textDim }}>
+      //       <Eye size={11} /> <span className="hidden xs:inline">{fmtNum(post.views)}</span>
+      //     </div>
+      //   </div>
+
+      //   {/* right: share — always pinned right, never wraps */}
+      //   <button onClick={share}
+      //     className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex-shrink-0"
+      //     style={{ fontFamily: B2, background: c.btnBg, color: c.btnText }}>
+      //     <Share2 size={13} />
+      //     <span>Share</span>
+      //   </button>
+      // </div>

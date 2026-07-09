@@ -65,16 +65,26 @@ const FALLBACK_POSTS: FeedItem[] = [
     createdAt: new Date("2026-07-03T00:00:00Z"),
   },
 ];
+// const groupedPosts = groupFeedByDate(items);
 
 export default function FeedPage({ onOpenDetail, onAuthRequired, onShare }: FeedPageProps) {
   const { items, loading, error } = useFeed();
   const sourceItems = items.length > 0 ? items : FALLBACK_POSTS;
+   const groupedPosts = groupFeedByDate(sourceItems);
 
   if (loading && items.length === 0) return <div className="px-3 py-8 text-center text-[11px] uppercase tracking-[0.2em] text-[var(--mv-text-dim)]">Loading drops…</div>;
 
   if (error && items.length === 0) return <div className="px-3 py-8 text-center text-[11px] uppercase tracking-[0.2em] text-[var(--mv-text-dim)]">{error}</div>;
 
-  const groupedPosts = groupFeedByDate(sourceItems);
+ 
 
-  return <Feed groupedPosts={groupedPosts} onOpenDetail={onOpenDetail} onAuthRequired={onAuthRequired} onShare={onShare} />;
+  return <Feed
+    groupedPosts={groupedPosts}
+    loading={loading}
+    hasMore={false}
+    sentinelRef={undefined}
+    onOpenDetail={onOpenDetail}
+    onAuthRequired={onAuthRequired}
+    onShare={onShare}
+/>
 }

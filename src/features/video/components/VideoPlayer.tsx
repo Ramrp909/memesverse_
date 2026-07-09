@@ -11,7 +11,7 @@ interface Props {
   small?: boolean;
 }
 
-export function VideoPlayer({ src, poster, small = false }: Props) {
+export default function VideoPlayer({ src, poster, small = false }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const {
     videoRef, playing, muted, currentTime, duration,
