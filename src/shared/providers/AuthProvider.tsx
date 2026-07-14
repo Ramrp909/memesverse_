@@ -1,46 +1,39 @@
-import { createContext, useContext, useState, type ReactNode } from "react";
-import type { AuthContextType, User } from "@/shared/types/auth";
+"use client";
 
-interface AuthContextValue {
-  user: User | null;
-  isLoggedIn: boolean;
-  login: (user: User) => void;
-  logout: () => void;
-}
+import {
+  createContext,
+  useContext,
+  type ReactNode,
+} from "react";
 
-const AuthContext = createContext<AuthContextValue>({
-  user: null,
-  isLoggedIn: false,
-  login: () => {},
-  logout: () => {},
-});
+import { useAuthController } from "@/features/auth/hooks/useAuthController";
+import type { AuthContextValue } from "@/shared/types/auth";
 
-export function AuthProvider({ children }: { children: ReactNode }) {
-  const DEMO_USER: User = {
-  id: 1,
-  username: "Guest",
-  avatar: "/images/avatar-placeholder.png",
-};
-  const [user, setUser] = useState<User | null>(null);
+export const AuthContext =
+  createContext<AuthContextValue | null>(null);
 
-  function login(u: User) {
-    setUser(u);
-  }
-
-  function logout() {
-    setUser(null);
-  }
-
-  // For demo: expose mock login helper on window
-  if (typeof window !== "undefined") {
-    (window as any).__mvLogin = () => login(DEMO_USER);
-  }
+export function AuthProvider({
+  children,
+}: {
+  children: ReactNode;
+}) {
+  const auth = useAuthController();
 
   return (
-    <AuthContext.Provider value={{ user, isLoggedIn: !!user, login, logout }}>
+    <AuthContext.Provider value={auth}>
       {children}
     </AuthContext.Provider>
   );
 }
 
-export const useAuth = () => useContext(AuthContext);
+export function useAuthContext() {
+  const context = useContext(AuthContext);
+
+  if (!context) {
+    throw new Error(
+      "useAuthContext must be used inside AuthProvider"
+    );
+  }
+
+  return context;
+}

@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 
+import { useAuth } from "../hooks/useAuth";
+
 import AuthHeader from "./AuthHeader";
 import SignInForm from "./SignInForm";
 import SignUpForm from "./SignUpForm";
@@ -20,6 +22,10 @@ export default function AuthModal({
   onClose,
   onLogin,
 }: AuthModalProps) {
+
+  const {login,signup,verifySignup,loading,error,} = useAuth();
+
+
   const [step, setStep] = useState<AuthStep>("signin");
 
   const [email, setEmail] = useState("");
@@ -27,7 +33,7 @@ export default function AuthModal({
   const [username, setUsername] = useState("");
 
   const [otp, setOtp] = useState("");
-  const [loading, setLoading] = useState(false);
+
 
   useEffect(() => {
     if (!open) return;
@@ -50,6 +56,54 @@ export default function AuthModal({
 
   if (!open) return null;
 
+  const handleLogin = async () => {
+  try {
+    await login({
+      email,
+      password,
+      device_id: "web-browser",
+    device_name: navigator.userAgent,
+    platform: "Web",
+    });
+
+    onLogin?.();
+    onClose();
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+const handleSignup = async () => {
+  try {
+    await signup({
+      user_name: username,
+      email,
+      password,
+      device_id: "web-browser",
+    });
+
+    setStep("otp");
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+const handleVerifyOtp = async () => {
+  try {
+    await verifySignup({
+      email,
+      otp,
+      device_id: "web-browser",
+    device_name: navigator.userAgent,
+    platform: "Web",
+    });
+
+    onLogin?.();
+    onClose();
+  } catch (err) {
+    console.error(err);
+  }
+};
   return (
     <div
       className="
@@ -71,12 +125,7 @@ export default function AuthModal({
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="
-          w-full
-          max-w-sm
-          max-h-[90vh]
-          overflow-y-auto
-
+        className="w-full max-w max-h-[90vh] overflow-y-auto
           rounded-t-3xl
           sm:rounded-2xl
 
@@ -92,6 +141,18 @@ export default function AuthModal({
         <div className="px-5 pt-5 pb-5">
 
           <AuthHeader onClose={onClose} />
+          {error && (
+  <div
+    className="mb-4 rounded-xl border px-3 py-2 text-sm"
+    style={{
+      borderColor: "#ef4444",
+      background: "rgba(239,68,68,.08)",
+      color: "#ef4444",
+    }}
+  >
+    {error}
+  </div>
+)}
 
           {step === "signin" && (
             <SignInForm
@@ -101,7 +162,7 @@ export default function AuthModal({
               onPasswordChange={setPassword}
               onGoogle={() => {}}
               onGuest={onLogin ?? (() => {})}
-              onLogin={() => setStep("otp")}
+              onLogin={handleLogin}
               onSwitchSignup={() => setStep("signup")}
             />
           )}
@@ -115,7 +176,7 @@ export default function AuthModal({
               onEmailChange={setEmail}
               onPasswordChange={setPassword}
               onGoogle={() => {}}
-              onSignup={() => setStep("otp")}
+              onSignup={handleSignup}
               onSwitchSignin={() => setStep("signin")}
             />
           )}
@@ -125,15 +186,7 @@ export default function AuthModal({
               otp={otp}
               loading={loading}
               onOtpChange={setOtp}
-              onVerify={() => {
-                setLoading(true);
-
-                setTimeout(() => {
-                  setLoading(false);
-                  onLogin?.();
-                  onClose();
-                }, 1000);
-              }}
+              onVerify={handleVerifyOtp}
               onResend={() => {}}
               onBack={() => setStep("signin")}
             />

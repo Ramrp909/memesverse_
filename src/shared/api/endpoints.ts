@@ -4,11 +4,16 @@ export const API_ENDPOINTS = {
     DETAIL: (id: number) => `/memes/${id}`,
   },
 
-  AUTH: {
-    LOGIN: "/auth/login",
-    LOGOUT: "/auth/logout",
-    REFRESH: "/auth/refresh",
-  },
+
+    AUTH: {
+  LOGIN: "/login",
+  SIGNUP: "/signup",
+  VERIFY_SIGNUP: "/verify_signup",
+  LOGOUT: "/logout",
+  FORGOT_PASSWORD: "/forgot_password",
+  RESET_PASSWORD: "/reset_password",
+},
+
 
   COMMENTS: {
     LIST: (id: number) => `/memes/${id}/comments`,

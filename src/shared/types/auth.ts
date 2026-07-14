@@ -1,14 +1,25 @@
-export interface User {
-  id: number;
-  username: string;
-  avatar: string;
-}
+import type { User } from "@/features/auth/types/auth.model";
+import type {
+  LoginRequest,
+  SignupRequest,
+  VerifySignupRequest,
+  ForgotPasswordRequest,
+  ResetPasswordRequest,
+} from "@/features/auth/types/auth.api";
 
-export interface AuthContextType {
+export interface AuthContextValue {
   user: User | null;
-  isLoggedIn: boolean;
-  login: () => void;
-  logout: () => void;
-}
+  loading: boolean;
+  error: string | null;
 
-export type AuthStatus = "authenticated" | "unauthenticated";
+  isAuthenticated: boolean;
+
+  login(payload: LoginRequest): Promise<User>;
+  signup(payload: SignupRequest): Promise<any>;
+  verifySignup(payload: VerifySignupRequest): Promise<User>;
+
+  forgotPassword(payload: ForgotPasswordRequest): Promise<any>;
+  resetPassword(payload: ResetPasswordRequest): Promise<any>;
+
+  logout(): Promise<void>;
+}
