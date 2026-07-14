@@ -26,18 +26,18 @@ export default function PostMedia({
         <VideoPlayer
           src={post.mediaUrl}
           poster={post.thumbnailUrl}
-          compact
+          small
         />
       ) : (
         <div className="group relative overflow-hidden">
           <img
-            src={post.mediaUrl}
-            alt={post.title}
-            className="w-full object-cover transition-transform duration-500 group-hover:scale-[1.01]"
-            style={{
-              maxHeight: 440,
-            }}
-          />
+  src={post.mediaUrl}
+  alt={post.title}
+  className="w-full object-contain"
+  style={{
+    maxHeight: "50vh",
+  }}
+/>
 
           <div className="absolute inset-0 bg-black/0 transition-all group-hover:bg-black/10" />
         </div>

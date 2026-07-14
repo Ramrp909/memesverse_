@@ -117,7 +117,9 @@ export function PostDetail({
       />
 
       <div
-        className="flex h-full w-full flex-col overflow-hidden border shadow-2xl md:h-auto md:max-h-[100dvh] md:max-w-[980px] md:flex-row md:rounded-2xl"
+        className="flex h-full w-full flex-col overflow-hidden border shadow-2xl md:grid md:grid-cols-[minmax(0,1fr)_320px]
+    md:max-h-[100dvh]
+    md:max-w-[980px]  md:rounded-2xl"
         style={{
           background: "var(--mv-card)",
           borderColor: "var(--mv-border)",
@@ -125,19 +127,38 @@ export function PostDetail({
       >
         {/* LEFT */}
 
-        <div className="flex min-h-0 flex-1 flex-col">
+        <div className="flex min-h-0 flex-col overflow-y-auto md:self-start">
           <PostDetailHeader
             mediaType={post.mediaType}
             onClose={onClose}
           />
 
-          <PostMedia
+          <div
+    className="flex items-center justify-center bg-black"
+    style={{
+        maxHeight:
+            post.mediaType === "image"
+                ? "50vh"
+                : undefined,
+    }}
+>
+    <div
+        className="w-full"
+        style={
+            post.mediaType === "video"
+                ? { aspectRatio: "16/9" }
+                : undefined
+        }
+    >
+        <PostMedia
             post={post}
             onOpenDetail={() => {}}
-          />
+        />
+    </div>
+</div>
 
           <div
-            className="border-t px-4 py-3"
+            className="border-t px-4 py-3 flex-shrink-0"
             style={{
               borderColor:
                 "var(--mv-border-subtle)",
@@ -162,12 +183,13 @@ export function PostDetail({
         {/* RIGHT */}
 
         <div
-          className="flex min-h-0 flex-1 flex-col border-t md:w-80 md:flex-none md:border-l md:border-t-0"
+          className="flex min-h-0 flex-1 flex-col border-t md:w-80 md:flex-none md:border-l md:border-t-0 overflow-hidden"
           style={{
             borderColor:
               "var(--mv-border-subtle)",
           }}
         >
+          <div className="flex min-h-0 flex-1 flex-col md:w-80">
           <div
             className="flex items-center justify-between border-b px-4 py-3"
             style={{
@@ -200,6 +222,7 @@ export function PostDetail({
               (() => {})
             }
           />
+          </div>
         </div>
       </div>
     </div>

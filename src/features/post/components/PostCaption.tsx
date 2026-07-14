@@ -13,7 +13,7 @@ export default function PostCaption({
 }: PostCaptionProps) {
   return (
     <div
-      className="cursor-pointer px-4 pt-3 pb-1"
+      className="cursor-pointer pt-0 pb-1 px-0"
       onClick={onOpenDetail}
     >
       <p
