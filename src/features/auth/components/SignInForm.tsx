@@ -27,7 +27,7 @@ export default function SignInForm({
   onSwitchSignup,
 }: SignInFormProps) {
   return (
-    <div className="mt-6">
+    <div className="pt-4">
 
       {/* Hero */}
       <div className="space-y-2">
@@ -42,7 +42,7 @@ export default function SignInForm({
         </p>
 
         <h2
-          className="text-[10px] font-black leading-none"
+          className="text-xl font-black leading-none tracking-[-0.02em]"
           style={{
             fontFamily: "'Onest',sans-serif",
             color: "var(--mv-text)",
@@ -52,18 +52,18 @@ export default function SignInForm({
         </h2>
 
         <p
-          className="max-w-[290px] text-sm leading-6"
+          className="max-w-[300px] text-xs leading-5"
           style={{
             fontFamily: "'DM Sans',sans-serif",
             color: "var(--mv-text-muted)",
           }}
         >
-          Members can like, save. Guest, view & share
+          Members can like,comment save. Guest, view & share
         </p>
       </div>
 
       {/* Google */}
-      <div className="pt-6">
+      <div className="pt-5">
         <GoogleButton
           label="Continue with Google"
           onClick={onGoogle}
@@ -71,7 +71,7 @@ export default function SignInForm({
       </div>
 
       {/* Divider */}
-      <div className="my-6 flex items-center gap-3">
+      <div className="my-3 flex items-center gap-3">
         <div
           className="h-px flex-1"
           style={{
@@ -80,13 +80,13 @@ export default function SignInForm({
         />
 
         <span
-          className="text-[10px] font-semibold lowercase tracking-wide"
+          className="text-[10px] font-semibold tracking-wide uppercase"
           style={{
             fontFamily: "'DM Sans',sans-serif",
             color: "var(--mv-text-dim)",
           }}
         >
-          or
+          OR
         </span>
 
         <div
@@ -98,32 +98,33 @@ export default function SignInForm({
       </div>
 
       {/* Inputs */}
-      <div className="space-y-4">
+      <div className="space-y-2.5">
 
         <input
           type="email"
           value={email}
           placeholder="Email"
           onChange={(e) => onEmailChange(e.target.value)}
-          className="
-            w-full
-            h-11
-            rounded-xl
-            border
-            px-4
-            text-sm
-            outline-none
-            transition-colors
-            focus:ring-2
-            focus:ring-[#6366f1]/20
-            focus:border-[#6366f1]
-          "
-          style={{
-            fontFamily: "'DM Sans',sans-serif",
-            background: "var(--mv-input-bg)",
-            borderColor: "var(--mv-input-border)",
-            color: "var(--mv-text)",
-          }}
+
+  className="
+    w-full
+    rounded-xl
+    border
+    px-4
+    py-2.5
+    text-sm
+    outline-none
+    transition-all
+   
+    focus:border-[#6366f1]
+    focus:ring-0
+  "
+  style={{
+    fontFamily: "'DM Sans',sans-serif",
+    background: "var(--mv-input-bg)",
+    borderColor: "var(--mv-input-border)",
+    color: "var(--mv-text)",
+  }}
         />
 
         <input
@@ -131,26 +132,26 @@ export default function SignInForm({
           value={password}
           placeholder="Password"
           onChange={(e) => onPasswordChange(e.target.value)}
-          className="
-            w-full
-            h-11
-            rounded-xl
-            border
-            px-4
-            text-sm
-            outline-none
-            transition-colors
-            focus:ring-2
-            focus:ring-[#6366f1]/20
-            focus:border-[#6366f1]
-          "
-          style={{
-            fontFamily: "'DM Sans',sans-serif",
-            background: "var(--mv-input-bg)",
-            borderColor: "var(--mv-input-border)",
-            color: "var(--mv-text)",
-          }}
-        />
+  className="
+    w-full
+    rounded-xl
+    border
+    px-4
+    py-2.5
+    text-sm
+    outline-none
+    transition-all
+
+    focus:border-[#6366f1]
+    focus:ring-0
+  "
+  style={{
+    fontFamily: "'DM Sans',sans-serif",
+    background: "var(--mv-input-bg)",
+    borderColor: "var(--mv-input-border)",
+    color: "var(--mv-text)",
+  }}
+/>
 
         <div className="flex justify-end">
           <button
@@ -167,13 +168,13 @@ export default function SignInForm({
       </div>
 
       {/* Buttons */}
-      <div className="mt-6 space-y-3">
+      <div className="mt-3 space-y-3">
 
         <button
           onClick={onLogin}
           className="
             w-full
-            h-11
+            py-2.5
             rounded-xl
             text-sm
             font-black
@@ -195,7 +196,7 @@ export default function SignInForm({
           onClick={onGuest}
           className="
             w-full
-            h-11
+            py-2.5
             rounded-xl
             border
             text-sm
@@ -216,7 +217,7 @@ export default function SignInForm({
 
       {/* Footer */}
       <p
-        className="mt-6 text-center text-sm"
+        className="mt-5 text-center text-sm"
         style={{
           fontFamily: "'DM Sans',sans-serif",
           color: "var(--mv-text-muted)",

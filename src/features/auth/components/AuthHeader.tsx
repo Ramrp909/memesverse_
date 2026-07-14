@@ -12,7 +12,7 @@ export default function AuthHeader({
 }: AuthHeaderProps) {
   return (
     <div
-      className="flex items-center justify-between pb-5 border-b"
+      className="flex items-center justify-between border-b pb-4"
       style={{
         borderColor: "var(--mv-border-subtle)",
       }}
@@ -20,17 +20,33 @@ export default function AuthHeader({
       <Logo />
 
       <button
+        type="button"
         onClick={onClose}
-        className="flex items-center gap-2 rounded-full border px-3 py-1.5 transition-all hover:opacity-80 active:scale-95"
+        className="
+          flex
+          h-9
+          flex-shrink-0
+          items-center
+          gap-1.5
+          rounded-xl
+          border
+          px-2.5
+          transition-all
+          hover:opacity-80
+          active:scale-95
+        "
         style={{
-          background: "var(--mv-btn-bg)",
-          borderColor: "var(--mv-border-subtle)",
+          fontFamily: "'DM Sans', sans-serif",
+          background: "var(--mv-button-bg)",
+          borderColor: "var(--mv-border)",
           color: "var(--mv-text-muted)",
-          fontFamily: "'Onest',sans-serif",
         }}
       >
-        <X size={14} />
-        <span className="text-xs font-bold uppercase tracking-wide">
+        <X size={13} strokeWidth={2.2} />
+
+        <span
+          className="text-[11px] font-bold uppercase tracking-[0.12em]"
+        >
           Exit
         </span>
       </button>

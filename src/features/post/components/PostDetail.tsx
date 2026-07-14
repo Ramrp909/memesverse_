@@ -5,8 +5,7 @@ import { useEffect, useState } from "react";
 import type { FeedItem } from "@/features/feed/types/feed.model";
 import type { Comment } from "@/features/comments/types/comment";
 
-// import ShareToast from "@/shared/components/ShareToast";
-
+import ShareToast from "@/shared/components/ShareToast";
 import PostDetailHeader from "./PostDetailHeader";
 import PostMedia from "./PostMedia";
 import PostCaption from "./PostCaption";
@@ -112,10 +111,10 @@ export function PostDetail({
         backdropFilter: "blur(16px)",
       }}
     >
-      {/* <ShareToast
+      <ShareToast
         visible={showToast}
         message="Post shared"
-      /> */}
+      />
 
       <div
         className="flex h-full w-full flex-col overflow-hidden border shadow-2xl md:h-auto md:max-h-[100dvh] md:max-w-[980px] md:flex-row md:rounded-2xl"

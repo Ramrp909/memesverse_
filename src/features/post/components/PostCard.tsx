@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { handleShare } from "@/shared/utils/share";
 
 import type { FeedItem } from "@/features/feed/types/feed.model";
 
-// import ShareToast from "@/shared/components/ShareToast";
+import ShareToast from "@/shared/components/ShareToast";
 
 import PostHeader from "./PostHeader";
 import PostMedia from "./PostMedia";
@@ -44,10 +45,15 @@ export default function PostCard({
     return () => window.clearTimeout(timer);
   }, [showToast]);
 
-  function handleShare() {
+  async function onShareClick() {
+  const shared = await handleShare(post);
+
+  if (!shared) {
     setShowToast(true);
-    onShare?.();
   }
+
+  onShare?.();
+}
 
   return (
     <>
@@ -80,14 +86,14 @@ export default function PostCard({
           isLoggedIn={isLoggedIn}
           onAuthRequired={onAuthRequired}
           onOpenDetail={onOpenDetail}
-          onShare={handleShare}
+          onShare={onShareClick}
         />
       </article>
 
-      {/* <ShareToast
+      <ShareToast
         visible={showToast}
         message="Post shared"
-      /> */}
+      />
     </>
   );
 }

@@ -6,8 +6,8 @@ import { Header } from "@/features/header/components/Header";
 import type { FeedItem } from "@/features/feed/types/feed.model";
 import { PostDetail } from "../features/post/components/PostDetail";
 import AuthModal from "../features/auth/components/AuthModal";
-import { ShareToast } from "../shared/components/ShareToast";
 import SettingsDrawer from "@/features/settings/components/SettingsDrawer";
+import ShareToast from "@/shared/components/ShareToast";
 
 export default function Home() {
   const [selectedPost, setSelectedPost] = useState<FeedItem | null>(null);

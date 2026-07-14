@@ -29,7 +29,7 @@ export default function SignUpForm({
   onSwitchSignin,
 }: SignUpFormProps) {
   return (
-    <div className="mt-6 space-y-6">
+    <div className="mt-3 space-y-3">
 
       {/* Hero */}
       <div className="space-y-2">
@@ -44,7 +44,7 @@ export default function SignUpForm({
         </p>
 
         <h2
-          className="text-[20px] font-black leading-none"
+          className="text-xl font-black leading-none tracking-[-0.02em]"
           style={{
             fontFamily: "'Onest',sans-serif",
             color: "var(--mv-text)",
@@ -70,8 +70,8 @@ export default function SignUpForm({
         onClick={onGoogle}
       />
 
-      {/* Divider */}
-      <div className="flex items-center gap-3">
+       {/* Divider */}
+      <div className="my-3 flex items-center gap-3">
         <div
           className="h-px flex-1"
           style={{
@@ -80,13 +80,13 @@ export default function SignUpForm({
         />
 
         <span
-          className="text-[10px] font-semibold tracking-wide lowercase"
+          className="text-[10px] font-semibold tracking-wide uppercase"
           style={{
             fontFamily: "'DM Sans',sans-serif",
             color: "var(--mv-text-dim)",
           }}
         >
-          or
+          OR
         </span>
 
         <div
