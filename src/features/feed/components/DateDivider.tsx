@@ -3,9 +3,9 @@ interface Props {
   meta?: string;
 }
 
-import type { DayDrop } from "../types/feed.model";
+import type { FeedGroup } from "../types/feed.model";
 
-export default function DateDivider({ day }: { day: DayDrop }) {
+export default function DateDivider({ day }: { day: FeedGroup }) {
  
  
   return (
