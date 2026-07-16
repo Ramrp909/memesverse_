@@ -10,6 +10,7 @@ import SignUpForm from "./SignUpForm";
 import OtpVerification from "./OtpVerification";
 
 import type { AuthStep } from "../types/auth";
+import { DeviceService } from "@/shared/services/device.service";
 
 interface AuthModalProps {
   open: boolean;
@@ -24,8 +25,6 @@ export default function AuthModal({
 }: AuthModalProps) {
 
   const {login,signup,verifySignup,loading,error,} = useAuth();
-
-
   const [step, setStep] = useState<AuthStep>("signin");
 
   const [email, setEmail] = useState("");
@@ -56,16 +55,15 @@ export default function AuthModal({
 
   if (!open) return null;
 
+
   const handleLogin = async () => {
+    const device = DeviceService.getDevice();
   try {
     await login({
       email,
       password,
-      device_id: "web-browser",
-    device_name: navigator.userAgent,
-    platform: "Web",
+      ...device,
     });
-
     onLogin?.();
     onClose();
   } catch (err) {
@@ -74,12 +72,13 @@ export default function AuthModal({
 };
 
 const handleSignup = async () => {
+  const device = DeviceService.getDevice();
   try {
     await signup({
       user_name: username,
       email,
       password,
-      device_id: "web-browser",
+      device_id: device.device_id,
     });
 
     setStep("otp");
@@ -89,13 +88,12 @@ const handleSignup = async () => {
 };
 
 const handleVerifyOtp = async () => {
+  const device = DeviceService.getDevice();
   try {
     await verifySignup({
       email,
       otp,
-      device_id: "web-browser",
-    device_name: navigator.userAgent,
-    platform: "Web",
+      ...device,
     });
 
     onLogin?.();
@@ -125,14 +123,16 @@ const handleVerifyOtp = async () => {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w max-h-[90vh] overflow-y-auto
-          rounded-t-3xl
-          sm:rounded-2xl
-
-          border
-          shadow-2xl
-
-          bg-[var(--mv-card)]
+        className="w-full
+sm:max-w-sm
+lg:max-w-[420px]
+max-h-[90vh]
+overflow-y-auto
+rounded-t-3xl
+sm:rounded-2xl
+border
+shadow-2xl
+bg-[var(--mv-card)]
         "
         style={{
           borderColor: "var(--mv-border)",

@@ -8,11 +8,11 @@ import type {
   SignupResponse,
   VerifySignupRequest,
   VerifySignupResponse,
+  LogoutResponse,
   ForgotPasswordRequest,
   ForgotPasswordResponse,
   ResetPasswordRequest,
   ResetPasswordResponse,
-  LogoutResponse,
 } from "../types/auth.api";
 
 export const authRepository = {

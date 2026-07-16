@@ -14,14 +14,10 @@ import type {
 export const authService = {
   async login(payload: LoginRequest) {
     const { data } = await authRepository.login(payload);
-
-    storage.saveAccessToken(data.access_token);
-
-    if (data.refresh_token) {
-      storage.saveRefreshToken(data.refresh_token);
-    }
-
-    return mapApiUser(data.user);
+    storage.saveToken(data.token);
+    const user = mapApiUser(data.user);
+    storage.saveUser(user);
+    return user;
   },
 
   async signup(payload: SignupRequest) {
@@ -33,13 +29,13 @@ export const authService = {
   async verifySignup(payload: VerifySignupRequest) {
     const { data } = await authRepository.verifySignup(payload);
 
-    storage.saveAccessToken(data.access_token);
+    storage.saveToken(data.token);
 
-    if (data.refresh_token) {
-      storage.saveRefreshToken(data.refresh_token);
-    }
+    const user = mapApiUser(data.user);
 
-    return mapApiUser(data.user);
+    storage.saveUser(user);
+
+    return user;
   },
 
   async logout() {

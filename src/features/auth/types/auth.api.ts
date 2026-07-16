@@ -1,4 +1,6 @@
-/* ---------- Requests ---------- */
+/* -------------------------------------------------------------------------- */
+/*                                   Requests                                 */
+/* -------------------------------------------------------------------------- */
 
 export interface LoginRequest {
   email: string;
@@ -33,44 +35,51 @@ export interface ResetPasswordRequest {
   password: string;
 }
 
-/* ---------- User ---------- */
+/* -------------------------------------------------------------------------- */
+/*                                    User                                    */
+/* -------------------------------------------------------------------------- */
 
 export interface ApiUser {
   id: number;
-  username: string;
+  user_name: string;
   email: string;
-  profile_picture?: string | null;
+  profile_pic?: string | null;
 }
 
-/* ---------- Responses ---------- */
+/* -------------------------------------------------------------------------- */
+/*                                  Responses                                 */
+/* -------------------------------------------------------------------------- */
 
 export interface LoginResponse {
-  access_token: string;
-  refresh_token?: string;
-  token_type: string;
+  status: string;
+  message: string;
+  token: string;
   user: ApiUser;
 }
 
 export interface SignupResponse {
+  status: string;
   message: string;
-  email: string;
 }
 
 export interface VerifySignupResponse {
-  access_token: string;
-  refresh_token?: string;
-  token_type: string;
+  status: string;
+  message: string;
+  token: string;
   user: ApiUser;
 }
 
 export interface LogoutResponse {
+  status: string;
   message: string;
 }
 
 export interface ForgotPasswordResponse {
+  status: string;
   message: string;
 }
 
 export interface ResetPasswordResponse {
+  status: string;
   message: string;
 }
