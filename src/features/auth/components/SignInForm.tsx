@@ -1,7 +1,9 @@
 "use client";
 
 import GoogleButton from "./GoogleButton";
-
+import { toast } from "sonner";
+import LoadingButton from "@/shared/components/ui/LoadingButton";
+import { validateEmail } from "@/shared/utils/validation";
 interface SignInFormProps {
   email: string;
   password: string;
@@ -12,6 +14,7 @@ interface SignInFormProps {
   onGoogle: () => void;
   onLogin: () => void;
   onGuest: () => void;
+  loading: boolean;
 
   onSwitchSignup: () => void;
 }
@@ -23,9 +26,28 @@ export default function SignInForm({
   onPasswordChange,
   onGoogle,
   onLogin,
+  loading,
   onGuest,
   onSwitchSignup,
 }: SignInFormProps) {
+  const handleLogin = () => {
+  if (!email.trim()) {
+    toast.error("Email is required.");
+    return;
+  }
+
+  if (!validateEmail(email)) {
+    toast.error("Please enter a valid email address.");
+    return;
+  }
+
+  if (!password.trim()) {
+    toast.error("Password is required.");
+    return;
+  }
+
+  onLogin();
+};
   return (
     <div className="pt-4">
 
@@ -170,27 +192,29 @@ export default function SignInForm({
       {/* Buttons */}
       <div className="mt-3 space-y-3">
 
-        <button
-          onClick={onLogin}
-          className="
-            w-full
-            py-2.5
-            rounded-xl
-            text-sm
-            font-black
-            text-white
-            transition-all
-            hover:opacity-90
-            active:scale-[0.98]
-          "
-          style={{
-            fontFamily: "'Onest',sans-serif",
-            background:
-              "linear-gradient(135deg,#6366f1,#8b5cf6)",
-          }}
-        >
-          Sign In
-        </button>
+        <LoadingButton
+    loading={loading}
+    loadingText="Signing In..."
+    onClick={handleLogin}
+    className="
+        w-full
+        py-2.5
+        rounded-xl
+        text-sm
+        font-black
+        text-white
+        transition-all
+        hover:opacity-90
+        active:scale-[0.98]
+    "
+    style={{
+        fontFamily: "'Onest',sans-serif",
+        background:
+            "linear-gradient(135deg,#6366f1,#8b5cf6)",
+    }}
+>
+    Sign In
+</LoadingButton>
 
         <button
           onClick={onGuest}

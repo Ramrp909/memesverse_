@@ -2,6 +2,9 @@
 
 import { Lock } from "lucide-react";
 import OtpInput from "./OtpInput";
+import LoadingButton from "@/shared/components/ui/LoadingButton";
+import { validateOtp } from "@/shared/utils/validation";
+import { toast } from "sonner";
 
 interface OtpVerificationProps {
   otp: string;
@@ -22,6 +25,15 @@ export default function OtpVerification({
   onResend,
   onBack,
 }: OtpVerificationProps) {
+
+  const handleVerify = () => {
+  if (!validateOtp(otp)) {
+    toast.error("Enter the complete 6-digit OTP.");
+    return;
+  }
+
+  onVerify();
+};
   return (
     <div className="mt-8">
 
@@ -66,18 +78,20 @@ export default function OtpVerification({
         />
       </div>
 
-      <button
-        disabled={otp.length !== 6 || loading}
-        onClick={onVerify}
-        className="mt-7 w-full rounded-xl py-3 text-sm font-bold text-white transition-all disabled:opacity-40"
-        style={{
-          fontFamily: "'Onest',sans-serif",
-          background:
-            "linear-gradient(135deg,#6366f1,#8b5cf6)",
-        }}
-      >
-        {loading ? "Verifying..." : "Verify"}
-      </button>
+      <LoadingButton
+  loading={loading}
+  loadingText="Verifying..."
+  disabled={otp.length !== 6}
+  onClick={handleVerify}
+  className="mt-7 w-full rounded-xl py-3 text-sm font-bold text-white transition-all disabled:opacity-40"
+  style={{
+    fontFamily: "'Onest',sans-serif",
+    background:
+      "linear-gradient(135deg,#6366f1,#8b5cf6)",
+  }}
+>
+  Verify
+</LoadingButton>
 
       <button
         onClick={onResend}

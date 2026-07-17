@@ -2,7 +2,7 @@ export interface User {
   id: number;
   username: string;
   email: string;
-  avatar?: string | null;
+  profile_pic: string | null;
 }
 
 export interface Session {

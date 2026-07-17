@@ -55,7 +55,6 @@ export default function AuthModal({
 
   if (!open) return null;
 
-
   const handleLogin = async () => {
     const device = DeviceService.getDevice();
   try {
@@ -163,6 +162,7 @@ bg-[var(--mv-card)]
               onGoogle={() => {}}
               onGuest={onLogin ?? (() => {})}
               onLogin={handleLogin}
+              loading={loading}
               onSwitchSignup={() => setStep("signup")}
             />
           )}
@@ -177,6 +177,7 @@ bg-[var(--mv-card)]
               onPasswordChange={setPassword}
               onGoogle={() => {}}
               onSignup={handleSignup}
+              loading={loading}
               onSwitchSignin={() => setStep("signin")}
             />
           )}

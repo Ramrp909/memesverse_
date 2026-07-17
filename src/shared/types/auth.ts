@@ -13,6 +13,7 @@ export interface AuthContextValue {
   error: string | null;
 
   isAuthenticated: boolean;
+  hydrated: boolean;
 
   login(payload: LoginRequest): Promise<User>;
   signup(payload: SignupRequest): Promise<any>;

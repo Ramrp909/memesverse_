@@ -2,23 +2,22 @@
 
 import Logo from "./Logo";
 import HeaderCountdown from "./HeaderCountDown"
-// import { useAuth } from "@/shared/providers/AuthProvider";
-
+import { useAuth } from "@/features/auth/hooks/useAuth";
 
 interface Props {
   onSettingsOpen: () => void;
 }
 
-
 export function Header({ onSettingsOpen }: Props) {
 
-  // Temporary until AuthProvider is connected
-  // const { user, isLoggedIn } = useAuth();
-
-  const isLoggedIn = false;
+const {
+  user,
+  isAuthenticated,
+  hydrated,
+} = useAuth();
 
   return (
-                   <header className="sticky top-0 z-20 border-b transition-colors duration-300"
+            <header className="sticky top-0 z-20 border-b transition-colors duration-300"
                      style={{
     background: "var(--mv-header)",
     borderColor: "var(--mv-border-subtle)",
@@ -35,9 +34,11 @@ export function Header({ onSettingsOpen }: Props) {
                          className="flex-shrink-0 transition-all hover:opacity-80 active:scale-95"
                          title="Settings"
                        >
-                         {isLoggedIn ? (
+                         {!hydrated ? (
+  <div className="w-8 h-8" />
+) : isAuthenticated ? (
                            <img
-                             src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=64&h=64&fit=crop&auto=format"
+                             src={user?.profile_pic ?? "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=64&h=64&fit=crop&auto=format"}
                              alt="Profile"
                              className="w-8 h-8 rounded-full object-cover ring-2"
                              // style={{ ringColor: "#6366f1" }}

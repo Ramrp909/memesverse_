@@ -1,11 +1,20 @@
 "use client";
 
+import LoadingButton from "@/shared/components/ui/LoadingButton";
 import GoogleButton from "./GoogleButton";
+import {
+  validateEmail,
+  validatePassword,
+  validateUsername,
+} from "@/shared/utils/validation";
+
+import { toast } from "sonner";
 
 interface SignUpFormProps {
   username: string;
   email: string;
   password: string;
+  loading: boolean;
 
   onUsernameChange: (value: string) => void;
   onEmailChange: (value: string) => void;
@@ -21,6 +30,7 @@ export default function SignUpForm({
   username,
   email,
   password,
+  loading,
   onUsernameChange,
   onEmailChange,
   onPasswordChange,
@@ -28,6 +38,25 @@ export default function SignUpForm({
   onSignup,
   onSwitchSignin,
 }: SignUpFormProps) {
+
+  const handleSignup = () => {
+  if (!validateUsername(username)) {
+    toast.error("Username must be at least 3 characters.");
+    return;
+  }
+
+  if (!validateEmail(email)) {
+    toast.error("Please enter a valid email address.");
+    return;
+  }
+
+  if (!validatePassword(password)) {
+    toast.error("Password must contain at least 8 characters.");
+    return;
+  }
+
+  onSignup();
+};
   return (
     <div className="mt-3 space-y-3">
 
@@ -144,8 +173,10 @@ export default function SignUpForm({
       </div>
 
       {/* Create Button */}
-      <button
-        onClick={onSignup}
+      <LoadingButton
+      loading={loading}
+      loadingText="Creating Account..."
+        onClick={handleSignup}
         className="w-full h-11 rounded-xl text-sm font-black text-white transition-all hover:opacity-90 active:scale-[0.98]"
         style={{
           fontFamily: "'Onest',sans-serif",
@@ -154,7 +185,7 @@ export default function SignUpForm({
         }}
       >
         Create Account &amp; Verify
-      </button>
+      </LoadingButton>
 
       {/* Footer */}
       <p
