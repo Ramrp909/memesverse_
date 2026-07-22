@@ -5,12 +5,14 @@ import OtpInput from "./OtpInput";
 import LoadingButton from "@/shared/components/ui/LoadingButton";
 import { validateOtp } from "@/shared/utils/validation";
 import { toast } from "sonner";
+import { useState } from "react";
+
 
 interface OtpVerificationProps {
   otp: string;
   loading?: boolean;
-
   onOtpChange: (value: string) => void;
+  resendCountdown: number;
 
   onVerify: () => void;
   onResend: () => void;
@@ -24,6 +26,7 @@ export default function OtpVerification({
   onVerify,
   onResend,
   onBack,
+  resendCountdown,
 }: OtpVerificationProps) {
 
   const handleVerify = () => {
@@ -92,17 +95,20 @@ export default function OtpVerification({
 >
   Verify
 </LoadingButton>
-
-      <button
-        onClick={onResend}
-        className="mt-3 w-full text-sm font-semibold"
-        style={{
-          fontFamily: "'DM Sans',sans-serif",
-          color: "#6366f1",
-        }}
-      >
-        Resend Code
-      </button>
+<button
+  disabled={resendCountdown > 0}
+  onClick={onResend}
+  className="mt-3 w-full text-sm font-semibold disabled:opacity-50"
+  style={{
+    fontFamily: "'DM Sans',sans-serif",
+    color: "#6366f1",
+  }}
+>
+  {resendCountdown > 0
+    ? `Resend in ${resendCountdown}s`
+    : "Resend Code"}
+</button>
+     
 
       <button
         onClick={onBack}

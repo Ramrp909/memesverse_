@@ -32,7 +32,86 @@ export default function AuthModal({
   const [username, setUsername] = useState("");
 
   const [otp, setOtp] = useState("");
+  const [resendCountdown, setResendCountdown] = useState(0);
 
+  
+const handleSignup = async () => {
+  const device = DeviceService.getDevice();
+  try {
+    await signup({
+      user_name: username,
+      email,
+      password,
+      device_id: device.device_id,
+    });
+
+    setStep("otp");
+    setResendCountdown(30);
+  } catch (err) {
+    console.error(err);
+  }
+};
+useEffect(() => {
+  if (resendCountdown <= 0) return;
+
+  const timer = setTimeout(() => {
+    setResendCountdown((prev) => prev - 1);
+  }, 1000);
+
+  return () => clearTimeout(timer);
+}, [resendCountdown]);
+
+const handleResend = async () => {
+  if (resendCountdown > 0) return;
+
+  const device = DeviceService.getDevice();
+
+  try {
+    await signup({
+      user_name: username,
+      email,
+      password,
+      device_id: device.device_id,
+    });
+
+    setResendCountdown(30);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+const handleVerifyOtp = async () => {
+  const device = DeviceService.getDevice();
+  try {
+    await verifySignup({
+      email,
+      otp,
+      ...device,
+    });
+
+    onLogin?.();
+    handleClose();
+  } catch (err) {
+    console.error(err);
+  }
+};
+const resetAuthState = ()=>{
+  setStep("signin");
+  setUsername("");
+  setEmail("");
+  setPassword("");
+  setOtp("");
+  setResendCountdown(0);
+}
+const handleClose = () => {
+  resetAuthState();
+  onClose();
+};
+useEffect(() => {
+  if (!open) {
+    resetAuthState();
+  }
+}, [open]);
 
   useEffect(() => {
     if (!open) return;
@@ -41,7 +120,7 @@ export default function AuthModal({
 
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        onClose();
+        handleClose();
       }
     };
 
@@ -64,43 +143,13 @@ export default function AuthModal({
       ...device,
     });
     onLogin?.();
-    onClose();
+    handleClose();
   } catch (err) {
     console.error(err);
   }
 };
 
-const handleSignup = async () => {
-  const device = DeviceService.getDevice();
-  try {
-    await signup({
-      user_name: username,
-      email,
-      password,
-      device_id: device.device_id,
-    });
 
-    setStep("otp");
-  } catch (err) {
-    console.error(err);
-  }
-};
-
-const handleVerifyOtp = async () => {
-  const device = DeviceService.getDevice();
-  try {
-    await verifySignup({
-      email,
-      otp,
-      ...device,
-    });
-
-    onLogin?.();
-    onClose();
-  } catch (err) {
-    console.error(err);
-  }
-};
   return (
     <div
       className="
@@ -118,7 +167,7 @@ const handleVerifyOtp = async () => {
         background: "var(--mv-modal-bg)",
         backdropFilter: "blur(12px)",
       }}
-      onClick={onClose}
+      onClick={handleClose}
     >
       <div
         onClick={(e) => e.stopPropagation()}
@@ -139,7 +188,7 @@ bg-[var(--mv-card)]
       >
         <div className="px-5 pt-5 pb-5">
 
-          <AuthHeader onClose={onClose} />
+          <AuthHeader onClose={handleClose} />
           {error && (
   <div
     className="mb-4 rounded-xl border px-3 py-2 text-sm"
@@ -186,9 +235,10 @@ bg-[var(--mv-card)]
             <OtpVerification
               otp={otp}
               loading={loading}
+              resendCountdown={resendCountdown}
               onOtpChange={setOtp}
               onVerify={handleVerifyOtp}
-              onResend={() => {}}
+              onResend={handleResend}
               onBack={() => setStep("signin")}
             />
           )}

@@ -24,6 +24,16 @@ export interface VerifySignupRequest {
   device_name: string;
   platform: string;
 }
+export interface OtpVerificationProps {
+  otp: string;
+  loading?: boolean;
+  resendCountdown: number;
+
+  onOtpChange: (value: string) => void;
+  onVerify: () => void;
+  onResend: () => void;
+  onBack: () => void;
+}
 
 export interface ForgotPasswordRequest {
   email: string;
