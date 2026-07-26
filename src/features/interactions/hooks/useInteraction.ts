@@ -21,8 +21,8 @@ export const useInteraction = (
 
   const actions = useMemo(
     () => ({
-      like: () => {console.log("useInteraction.like");
-        interactionActions.like(memeId);},
+      like: () =>
+        interactionActions.like(memeId),
 
       bookmark: () =>
         interactionActions.bookmark(memeId),

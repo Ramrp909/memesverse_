@@ -7,6 +7,7 @@ import {
   MessageCircle,
   Share2,
   ThumbsDown,
+  Bookmark,
   ThumbsUp,
 } from "lucide-react";
 
@@ -33,12 +34,16 @@ export default function PostActions({
 }: PostActionsProps) {
   const [disliked, setDisliked] = useState(false);
 const { isAuthenticated } = useAuth();
+
  const {
   liked,
   likes,
   comments,
   views,
+  bookmarks,
+  bookmarked,
   like,
+  bookmark,
   share,
 } = useInteraction(post.id, {
   likes: post.likes,
@@ -74,6 +79,18 @@ const { isAuthenticated } = useAuth();
 
     setDisliked((prev) => !prev);
   }
+
+  async function handleBookmark() {
+   if (!isAuthenticated) {
+    onAuthRequired?.();
+    return;
+  }
+  try {
+    await bookmark();
+  } catch (error) {
+    console.error("Bookmark failed", error);
+  }
+}
 
   async function handleShare() {
     await share();
@@ -166,18 +183,50 @@ const { isAuthenticated } = useAuth();
         </div>
       </div>
 
-      <button
-        onClick={handleShare}
-        className="flex flex-shrink-0 items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all"
-        style={{
-          fontFamily: "'DM Sans', sans-serif",
-          background: "var(--mv-button-bg)",
-          color: "var(--mv-button-text)",
-        }}
-      >
-        <Share2 size={13} />
-        <span>Share</span>
-      </button>
+     <div className="flex items-center gap-2 flex-shrink-0">
+  <button
+    onClick={handleBookmark}
+    className="flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-semibold transition-all"
+    style={{
+      fontFamily: "'DM Sans', sans-serif",
+      background: bookmarked
+        ? "#6366f1"
+        : "var(--mv-button-bg)",
+      color: bookmarked
+        ? "#fff"
+        : "var(--mv-button-text)",
+    }}
+  >
+    <Bookmark
+      size={13}
+      fill={bookmarked ? "currentColor" : "none"}
+    />
+    {/* <span>{formatNumber(bookmarks)}</span> */}
+
+    {!isAuthenticated && (
+      <Lock
+        size={9}
+        className="opacity-40"
+      />
+    )}
+  </button>
+
+  <button
+    onClick={handleShare}
+    className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all"
+    style={{
+      fontFamily: "'DM Sans', sans-serif",
+      background: "var(--mv-button-bg)",
+      color: "var(--mv-button-text)",
+    }}
+  >
+    <Share2 size={13} />
+    <span>Share</span>
+  </button>
+</div>
+      
+
+     
     </div>
   );
 }
