@@ -31,7 +31,11 @@ export default function VideoPlayer({ src, poster, small = false }: Props) {
   return (
     <div
       ref={containerRef}
-      style={{ position: "relative", width: "100%", aspectRatio: fullscreen ? "auto" : "16/9", height: fullscreen ? "100dvh" : undefined, background: "#000", userSelect: "none", borderRadius: small ? 10 : 12, overflow: "hidden" }}
+      style={{ position: "relative", width: "100%",
+         minHeight: "450px", 
+    aspectRatio: fullscreen ? "auto" : "4/3", 
+    height: fullscreen ? "100dvh" : "auto", 
+        background: "#000", userSelect: "none", borderRadius: small ? 10 : 12, overflow: "hidden" }}
       onMouseMove={revealControls}
       onTouchStart={revealControls}
     >
@@ -40,7 +44,7 @@ export default function VideoPlayer({ src, poster, small = false }: Props) {
         onClick={togglePlay}
         src={src}
         poster={poster}
-        style={{ width: "100%", height: "100%", objectFit: "contain" }}
+        style={{ width: "100%", height: "100%", objectFit: "cover" }}
         playsInline
         loop
         muted

@@ -8,8 +8,11 @@ export interface FeedApiItem {
 
   likes_count: number;
   views_count: number;
+  comments_count?: number;
   bookmarks_count: number;
   shares_count: number;
+  liked?: boolean;
+  bookmarked?: boolean;
 
   created_at: string;
 }

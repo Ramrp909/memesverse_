@@ -15,6 +15,7 @@ import CommentList from "@/features/comments/components/CommentList";
 import CommentInput from "@/features/comments/components/CommentInput";
 
 import { DUMMY_COMMENTS } from "../../comments/types/comment"
+import { useAuth } from "@/features/auth/hooks/useAuth";
 
 interface Props {
   post: FeedItem | null;
@@ -30,7 +31,7 @@ interface Props {
 export function PostDetail({
   post,
   open,
-  isLoggedIn = false,
+  isLoggedIn,
   onClose,
   onAuthRequired,
   onShare,
@@ -43,6 +44,7 @@ export function PostDetail({
 
   const [showToast, setShowToast] =
     useState(false);
+const { isAuthenticated } = useAuth();
 
   useEffect(() => {
     if (!open) return;
@@ -171,7 +173,7 @@ export function PostDetail({
 
             <PostActions
               post={post}
-              isLoggedIn={isLoggedIn}
+              isLoggedIn={isAuthenticated}
               onAuthRequired={
                 onAuthRequired
               }
@@ -213,7 +215,7 @@ export function PostDetail({
           />
 
           <CommentInput
-            isLoggedIn={isLoggedIn}
+            isLoggedIn={isAuthenticated}
             value={commentText}
             onChange={setCommentText}
             onSubmit={submitComment}

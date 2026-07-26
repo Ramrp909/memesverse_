@@ -11,6 +11,7 @@ import PostHeader from "./PostHeader";
 import PostMedia from "./PostMedia";
 import PostCaption from "./PostCaption";
 import PostActions from "./PostActions";
+import { useAuth } from "@/features/auth/hooks/useAuth";
 
 interface PostCardProps {
   post: FeedItem;
@@ -34,7 +35,7 @@ export default function PostCard({
   onShare,
 }: PostCardProps) {
   const [showToast, setShowToast] = useState(false);
-
+const { isAuthenticated } = useAuth();
   useEffect(() => {
     if (!showToast) return;
 
@@ -83,7 +84,7 @@ export default function PostCard({
 
         <PostActions
           post={post}
-          isLoggedIn={isLoggedIn}
+          isLoggedIn={isAuthenticated}
           onAuthRequired={onAuthRequired}
           onOpenDetail={onOpenDetail}
           onShare={onShareClick}

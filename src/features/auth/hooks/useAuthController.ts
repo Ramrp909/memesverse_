@@ -21,8 +21,7 @@ export function useAuthController() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 const [hydrated, setHydrated] = useState(false);
-  const isAuthenticated =
-  !!storage.getToken() && !!user;
+  const isAuthenticated = !!user;
 
   const login = useCallback(async (payload: LoginRequest) => {
     try {
@@ -107,33 +106,37 @@ const [hydrated, setHydrated] = useState(false);
     }
   }, []);
 
-  const restoreSession = useCallback(() => {
+const restoreSession = useCallback(() => {
   const token = storage.getToken();
   const cachedUser = storage.getUser<User>();
 
   if (token && cachedUser) {
     setUser(cachedUser);
+  } else {
+    setUser(null);
   }
 }, []);
+
 const clearError = useCallback(() => {
   setError(null);
 }, []);
 
-  const logout = useCallback(async () => {
-    try {
-      setLoading(true);
+const logout = useCallback(async () => {
+  setLoading(true);
 
-      await authService.logout();
-      setUser(null);
-      setError(null);
-    } catch (err) {
-  const message = getErrorMessage(err);
-  setError(message);
-  throw err;}
-  finally {
-      setLoading(false);
-    }
-  }, []);
+  try {
+    await authService.logout();
+  } catch (err) {
+    console.error(err);
+  } finally {
+    storage.clearSession();
+    setUser(null);
+    setError(null);
+    setLoading(false);
+  }
+}, []);
+
+
 
  useEffect(() => {
     restoreSession();
@@ -164,6 +167,7 @@ const clearError = useCallback(() => {
       loading,
       error,
       isAuthenticated,
+      hydrated,
 
       login,
       signup,
