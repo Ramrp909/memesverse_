@@ -1,12 +1,34 @@
-export interface Comment {
+export interface CommentUser {
   id: number;
-  user: string;
+  name: string;
   avatar: string;
-  text: string;
-  time: string;
-  likes: number;
 }
 
+export interface Comment {
+  id: number;
+  text: string;
+  createdAt: string;
+  likes: number;
+  isOwner: boolean;
+  replyCount: number;
+  user: CommentUser;
+  replies: Comment[];
+}
+
+export interface CommentsPage {
+    comments: Comment[];
+    page: number;
+    pageSize: number;
+    totalComments: number;
+}
+export interface CreateCommentResult {
+    comment: Comment;
+    commentsCount: number;
+}
+export interface DeleteCommentResult {
+    success: boolean;
+    commentId: number;
+}
 
 export const DUMMY_COMMENTS: Comment[] = [
   { id: 1, user: "ByteWizard",  avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=64&h=64&fit=crop&auto=format", text: "This is literally me every single Monday morning 💀", time: "2h ago", likes: 342 },
