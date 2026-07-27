@@ -2,6 +2,7 @@
 
 import VideoPlayer from "@/features/video/components/VideoPlayer";
 import type { FeedItem } from "@/features/feed/types/feed.model";
+import { useViewTracking } from "@/features/interactions/hooks/useViewTracking";
 
 interface PostMediaProps {
   post: FeedItem;
@@ -13,7 +14,9 @@ export default function PostMedia({
   onOpenDetail,
 }: PostMediaProps) {
   const isVideo = post.mediaType === "video";
-
+const viewRef = useViewTracking({
+  memeId: post.id,
+});
   return (
     <div
       className="bg-black"
@@ -24,6 +27,7 @@ export default function PostMedia({
     >
       {isVideo ? (
         <VideoPlayer
+        memeId={post.id}
           src={post.mediaUrl}
           poster={post.thumbnailUrl}
           small
@@ -38,8 +42,10 @@ export default function PostMedia({
 //     maxHeight: "65vh",
 //   }}
 // />
-<div className="group relative h-[500px] w-full overflow-hidden rounded-lg flex items-center justify-center">
+<div 
+ ref={viewRef} className="group relative h-[500px] w-full overflow-hidden rounded-lg flex items-center justify-center">
   <img
+ 
     src={post.mediaUrl}
     alt={post.title}
     className="max-h-full max-w-full object-contain transition-transform duration-300 group-hover:scale-105"

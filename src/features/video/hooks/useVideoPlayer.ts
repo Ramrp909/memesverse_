@@ -3,9 +3,16 @@ import { useRef, useState, useCallback, useEffect } from "react";
 import { useFullscreen } from "./useFullScreen";
 import { useVideoStorage } from "./useVideoStorage";
 import { useVideoVisibility } from "./useVideoVisibility";
+
+import { useVideoTracking }
+from "@/features/interactions/hooks/useVideoTracking";
+
+
 let activeVideo: HTMLVideoElement | null = null;
 
-export function useVideoPlayer() {
+export function useVideoPlayer(
+  memeId? : number
+) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [loading, setLoading] = useState(false);
   const [playing, setPlaying] = useState(false);
@@ -25,6 +32,14 @@ const {
   videoRef,
   setMuted
 );
+
+const videoTracking =
+    memeId
+        ? useVideoTracking({
+              memeId,
+          })
+        : null;
+
 const isVisible = useVideoVisibility(
   videoRef,
   () => {
@@ -133,6 +148,10 @@ const onCanPlay = () => setLoading(false);
       if (v.buffered.length > 0) {
         setBuffered(v.buffered.end(v.buffered.length - 1));
       }
+       videoTracking?.track(
+        v.currentTime,
+        v.duration
+    );
     };
     const onLoadedMetadata = () => setDuration(v.duration);
     const onEnded = () => { setPlaying(false); setShowControls(true); };

@@ -6,18 +6,19 @@ import VideoControls from "./VideoControls";
 import VideoLoading from "./VideoLoading";
 
 interface Props {
+  memeId: number;
   src: string;
   poster?: string;
   small?: boolean;
 }
 
-export default function VideoPlayer({ src, poster, small = false }: Props) {
+export default function VideoPlayer({ memeId,src, poster, small = false }: Props) {
  
   const {
     videoRef, playing, muted, currentTime, duration,
     progress, bufferedPct, showControls, fullscreen,containerRef,
     togglePlay, toggleMute, restart, seek, toggleFullscreen, revealControls,loading,
-  } = useVideoPlayer();
+  } = useVideoPlayer(memeId);
 
   const iconSize = small ? 13 : 15;
   const playIconSize = small ? 18 : 24;

@@ -1,0 +1,7 @@
+// shared/config/interactions.ts
+
+export const INTERACTION_CONFIG = {
+  IMAGE_VIEW_DURATION_MS: 2000,
+  VIDEO_VIEW_THRESHOLD: 0.3,
+};
+threshold = INTERACTION_CONFIG.VIDEO_VIEW_THRESHOLD;

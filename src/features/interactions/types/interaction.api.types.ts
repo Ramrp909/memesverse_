@@ -58,3 +58,10 @@ export interface InteractionApiState {
   shares_count: number;
   views_count: number;
 }
+
+export interface UseViewTrackingOptions {
+    memeId: number;
+    enabled?: boolean;
+    duration?: number;
+    threshold?: number;
+}
