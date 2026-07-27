@@ -20,7 +20,7 @@ export function useAuthController() {
 );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-const [hydrated] = useState(true);
+const [hydrated,setHydrated] = useState(false);
   const isAuthenticated = !!user;
 
   const login = useCallback(async (payload: LoginRequest) => {
@@ -138,10 +138,10 @@ const logout = useCallback(async () => {
 
 
 
-//  useEffect(() => {
-//     restoreSession();
-//     setHydrated(true);
-// }, [restoreSession]);
+ useEffect(() => {
+    restoreSession();
+    setHydrated(true);
+}, [restoreSession]);
 
   return useMemo(
     () => ({

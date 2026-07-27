@@ -22,7 +22,7 @@ export function useFeed() {
       setLoading(false);
     }
   },[]);
-// eslint-disable-next-line react-hooks/set-state-in-effect
+
   useEffect(() => {
     void loadFeed();
   }, [loadFeed]);

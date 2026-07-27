@@ -32,11 +32,7 @@ const {
   videoRef,
   setMuted
 );
-
 const {track} = useVideoTracking({memeId});
-
-
-
 const isVisible = useVideoVisibility(
   videoRef,
   () => {
@@ -54,13 +50,9 @@ const isVisible = useVideoVisibility(
       }
     }
   }
-);
-
-
-  const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-
-  const scheduleHide = useCallback(() => {
+);  
+const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+const scheduleHide = useCallback(() => {
     if (hideTimer.current) clearTimeout(hideTimer.current);
     hideTimer.current = setTimeout(() => setShowControls(false), 2600);
   }, []);
@@ -207,11 +199,11 @@ document.removeEventListener(
   onVisibilityChange
 );
 
-  if (videoRef.current) {
-      videoRef.current.pause();
+  if (v) {
+      v.pause();
    }
 
-   if (activeVideo === videoRef.current) {
+   if (activeVideo === v) {
       activeVideo = null;
    }
     };

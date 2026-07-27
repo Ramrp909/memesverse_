@@ -20,9 +20,9 @@ export function AuthProvider({
 }) {
   const auth = useAuthController();
 
-  useEffect(() => {
-    auth.restoreSession();
-  }, []);
+  // useEffect(() => {
+  //   auth.restoreSession();
+  // }, []);
 
   return (
     <AuthContext.Provider value={auth}>
