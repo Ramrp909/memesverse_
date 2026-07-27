@@ -11,7 +11,7 @@ from "@/features/interactions/hooks/useVideoTracking";
 let activeVideo: HTMLVideoElement | null = null;
 
 export function useVideoPlayer(
-  memeId? : number
+  memeId : number
 ) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [loading, setLoading] = useState(false);
@@ -33,12 +33,9 @@ const {
   setMuted
 );
 
-const videoTracking =
-    memeId
-        ? useVideoTracking({
-              memeId,
-          })
-        : null;
+const {track} = useVideoTracking({memeId});
+
+
 
 const isVisible = useVideoVisibility(
   videoRef,
@@ -113,7 +110,7 @@ const isVisible = useVideoVisibility(
     v.muted = !v.muted;
     setMuted(v.muted);
     saveMuted(v.muted);
-  }, []);
+  }, [saveMuted]);
 
   const restart = useCallback(() => {
     const v = videoRef.current;
@@ -148,7 +145,7 @@ const onCanPlay = () => setLoading(false);
       if (v.buffered.length > 0) {
         setBuffered(v.buffered.end(v.buffered.length - 1));
       }
-       videoTracking?.track(
+       track(
         v.currentTime,
         v.duration
     );
@@ -218,7 +215,7 @@ document.removeEventListener(
       activeVideo = null;
    }
     };
-  }, []);
+  }, [track]);
 
   const progress = duration > 0 ? currentTime / duration : 0;
   const bufferedPct = duration > 0 ? buffered / duration : 0;

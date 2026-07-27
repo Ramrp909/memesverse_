@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FeedItem } from "../types/feed.model";
 import { FeedService } from "../services/feed.service";
 
@@ -9,12 +9,11 @@ export function useFeed() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const loadFeed = async () => {
+  const loadFeed = useCallback(async () => {
     try {
       setLoading(true);
-
+      setError(null);
       const response = await FeedService.getFeed();
-
       setItems(response.items);
     } catch (err) {
       console.error(err);
@@ -22,11 +21,11 @@ export function useFeed() {
     } finally {
       setLoading(false);
     }
-  };
-
+  },[]);
+// eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => {
-    loadFeed();
-  }, []);
+    void loadFeed();
+  }, [loadFeed]);
 
   return {
     items,

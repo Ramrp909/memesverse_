@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { useAuth } from "../hooks/useAuth";
 
@@ -44,7 +44,6 @@ const handleSignup = async () => {
       password,
       device_id: device.device_id,
     });
-
     setStep("otp");
     setResendCountdown(30);
   } catch (err) {
@@ -95,42 +94,43 @@ const handleVerifyOtp = async () => {
     console.error(err);
   }
 };
-const resetAuthState = ()=>{
+const resetAuthState = useCallback(() => {
   setStep("signin");
   setUsername("");
   setEmail("");
   setPassword("");
   setOtp("");
   setResendCountdown(0);
-}
-const handleClose = () => {
+}, []);
+
+const handleClose = useCallback(() => {
   resetAuthState();
   onClose();
-};
+},[resetAuthState,onClose]);
+// useEffect(() => {
+//   if (!open) {
+//     resetAuthState();
+//   }
+// }, [open]);
+
 useEffect(() => {
-  if (!open) {
-    resetAuthState();
-  }
-}, [open]);
+  if (!open) return;
 
-  useEffect(() => {
-    if (!open) return;
+  document.body.style.overflow = "hidden";
 
-    document.body.style.overflow = "hidden";
+  const handleEscape = (e: KeyboardEvent) => {
+    if (e.key === "Escape") {
+      handleClose();
+    }
+  };
 
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        handleClose();
-      }
-    };
+  window.addEventListener("keydown", handleEscape);
 
-    window.addEventListener("keydown", handleEscape);
-
-    return () => {
-      document.body.style.overflow = "";
-      window.removeEventListener("keydown", handleEscape);
-    };
-  }, [open, onClose]);
+  return () => {
+    document.body.style.overflow = "";
+    window.removeEventListener("keydown", handleEscape);
+  };
+}, [open, handleClose]);
 
   if (!open) return null;
 
