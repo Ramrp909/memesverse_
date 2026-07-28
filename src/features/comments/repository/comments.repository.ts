@@ -11,6 +11,7 @@ export const commentsRepository = {
   async getComments(request: GetCommentsRequest): Promise<CommentsPage> {
     const response =
       await commentsApi.getComments(request);
+      console.log("API RESPONSE", response);
     return {
       page: response.page,
       pageSize: response.page_size,

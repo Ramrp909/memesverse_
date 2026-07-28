@@ -14,8 +14,9 @@ import PostActions from "./PostActions";
 import CommentList from "@/features/comments/components/CommentList";
 import CommentInput from "@/features/comments/components/CommentInput";
 
-import { DUMMY_COMMENTS } from "../../comments/types/comment"
 import { useAuth } from "@/features/auth/hooks/useAuth";
+import { useComments } from "@/features/comments/hooks/useComments";
+
 
 interface Props {
   post: FeedItem | null;
@@ -36,8 +37,7 @@ export function PostDetail({
   onAuthRequired,
   onShare,
 }: Props) {
-  const [comments, setComments] =
-    useState<Comment[]>(DUMMY_COMMENTS);
+ 
 
   const [commentText, setCommentText] =
     useState("");
@@ -45,6 +45,26 @@ export function PostDetail({
   const [showToast, setShowToast] =
     useState(false);
 const { isAuthenticated } = useAuth();
+
+const {
+    comments,
+    loading,
+    loadComments,
+} = useComments(post?.id ?? 0);
+
+console.log({
+    comments,
+    count: comments.length,
+});
+useEffect(() => {
+
+    if (!open || !post) {
+        return;
+    }
+
+    loadComments();
+
+}, [open, post?.id]);
 
   useEffect(() => {
     if (!open) return;
@@ -88,19 +108,19 @@ const { isAuthenticated } = useAuth();
   function submitComment() {
     if (!commentText.trim()) return;
 
-    setComments((prev) => [
-      ...prev,
-      {
-        id: Date.now(),
-        user: "You",
-        avatar:
-          "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=64",
-        text: commentText,
-        time: "Just now",
-        likes: 0,
-      },
-    ]);
-
+    // setComments((prev) => [
+    //   ...prev,
+    //   {
+    //     id: Date.now(),
+    //     user: "You",
+    //     avatar:
+    //       "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=64",
+    //     text: commentText,
+    //     time: "Just now",
+    //     likes: 0,
+    //   },
+    // ]);
+console.log(commentText)
     setCommentText("");
   }
 

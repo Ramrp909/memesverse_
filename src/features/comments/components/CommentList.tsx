@@ -18,8 +18,8 @@ export default function CommentList({
           className="flex gap-3"
         >
           <img
-            src={comment.avatar}
-            alt={comment.user}
+            src={comment.user.avatar}
+            alt={comment.user.name}
             className="mt-0.5 h-7 w-7 flex-shrink-0 rounded-full object-cover"
           />
 
@@ -32,7 +32,7 @@ export default function CommentList({
                   color: "var(--mv-text)",
                 }}
               >
-                {comment.user}
+                {comment.user.name}
               </span>
 
               <span
@@ -42,7 +42,7 @@ export default function CommentList({
                   color: "var(--mv-text-dim)",
                 }}
               >
-                {comment.time}
+                {new Date(comment.createdAt).toLocaleString()}
               </span>
             </div>
 
@@ -72,5 +72,7 @@ export default function CommentList({
         </div>
       ))}
     </div>
+
+    
   );
 }
