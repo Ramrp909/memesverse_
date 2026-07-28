@@ -6,11 +6,13 @@ interface CommentsState {
     commentsByMeme: Record<number, CommentsPage>;
     loadingByMeme: Record<number, boolean>;
     submittingByMeme: Record<number, boolean>;
+    errorByMeme: Record<number, string | null>;
     loadedMemeIds: Set<number>;
     getComments: (memeId: number) => CommentsPage | undefined;
     isLoaded: (memeId: number) => boolean;
     isLoading: (memeId: number) => boolean;
     isSubmitting: (memeId: number) => boolean;
+    getError: (memeId: number) => string | null;
     loadComments: (
     memeId: number,
     force?: boolean
@@ -31,6 +33,7 @@ export const useCommentsStore =
 create<CommentsState>((set,get) => ({
     commentsByMeme: {},
     loadingByMeme: {},
+    errorByMeme:{},
     submittingByMeme: {},
     loadedMemeIds: new Set(),
     getComments: (memeId) =>
@@ -44,6 +47,8 @@ create<CommentsState>((set,get) => ({
 
     isSubmitting: (memeId) =>
         get().submittingByMeme[memeId] ?? false,
+    getError: (memeId) => 
+        get().errorByMeme[memeId],
 
     loadComments: async (
     memeId,
@@ -77,7 +82,16 @@ create<CommentsState>((set,get) => ({
                 loadedMemeIds,
             };
         });
-    } finally {
+    } 
+    catch (error) {
+
+    set((state) => ({
+        errorByMeme: {
+            ...state.errorByMeme,
+            [memeId]: "Unable to load comments.",
+        },
+    }))}
+    finally {
         set((state) => ({
             loadingByMeme: {
                 ...state.loadingByMeme,
@@ -123,7 +137,17 @@ createComment: async (
     };
 });
     console.log("CREATE RESULT", result);
-} finally {
+} 
+catch (error) {
+
+    set((state) => ({
+        errorByMeme: {
+            ...state.errorByMeme,
+            [memeId]: "Unable to load comments.",
+        },
+    }));
+
+}finally {
     set((state) => ({
         submittingByMeme: {
             ...state.submittingByMeme,

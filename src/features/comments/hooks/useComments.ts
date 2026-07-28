@@ -18,12 +18,13 @@ export function useComments(memeId: number) {
     );
     const createComment = useCommentsStore(
     state => state.createComment
-);
-
-const deleteComment =
-    useCommentsStore(
-        (state) => state.deleteComment
     );
+    const deleteComment =useCommentsStore(
+    (state) => state.deleteComment
+    );
+    const error = useCommentsStore(
+        state => state.getError(memeId)
+    )
 
     return {
         comments: commentsPage?.comments ?? [],
@@ -32,19 +33,19 @@ const deleteComment =
         loading,
         loaded,
         submitting,
+        error,
         loadComments: (force = false) =>
             loadComments(memeId, force),
-        createComment: (
-    commentText: string,
-    parentCommentId?: number | null
-) =>
-    createComment(
-        memeId,
-        commentText,
-        parentCommentId
-    ),
-    deleteComment: (commentId: number) =>
-    deleteComment(memeId, commentId),
+        createComment: ( commentText: string,
+            parentCommentId?: number | null
+                ) =>
+                    createComment(
+                        memeId,
+                        commentText,
+                        parentCommentId
+        ),
+        deleteComment: (commentId: number) =>
+        deleteComment(memeId, commentId),
     };
     
 

@@ -16,7 +16,8 @@ import CommentInput from "@/features/comments/components/CommentInput";
 
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { useComments } from "@/features/comments/hooks/useComments";
-
+import CommentSkeleton from "@/features/comments/components/CommentSkeleton";
+import CommentEmptyState from "@/features/comments/components/CommentEmptyState";
 
 interface Props {
   post: FeedItem | null;
@@ -52,6 +53,7 @@ const {
     loadComments,
     createComment,
     deleteComment,
+    error,
 } = useComments(post?.id ?? 0);
 
 console.log({
@@ -106,32 +108,6 @@ useEffect(() => {
       setShowToast(false);
     }, 1800);
   }
-
-//   function submitComment() {
-//     if (!commentText.trim()) return;
-
-//     // setComments((prev) => [
-//     //   ...prev,
-//     //   {
-//     //     id: Date.now(),
-//     //     user: "You",
-//     //     avatar:
-//     //       "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=64",
-//     //     text: commentText,
-//     //     time: "Just now",
-//     //     likes: 0,
-//     //   },
-//     // ]);
-// console.log(commentText)
-//     setCommentText("");
-//   }
-// async function submitComment() {
-//     if (!commentText.trim()) {
-//         return;
-//     }
-//     await createComment(commentText);
-//     setCommentText("");
-// }
 
   return (
     <div
@@ -239,11 +215,22 @@ useEffect(() => {
             </h3>
           </div>
 
+          {loading ? (
+            <CommentSkeleton />
+          ): comments.length === 0 ? (
+            <CommentEmptyState 
+             isLoggedIn={isAuthenticated}
+    onAuthRequired={onAuthRequired}
+            />
+          ) :
+          (
           <CommentList
             comments={comments}
             onDeleteComment={deleteComment}
           />
-
+          )
+        }
+          
           <CommentInput
             isLoggedIn={isAuthenticated}
             onSubmit={createComment}
