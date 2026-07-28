@@ -28,7 +28,7 @@ export const commentsRepository = {
       await commentsApi.createComment(request);
     return {
       comment:
-        commentsMapper.comment(response.comment),
+        commentsMapper.createdComment(response.comment),
       commentsCount:
         response.comments_count,
     };

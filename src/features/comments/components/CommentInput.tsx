@@ -1,22 +1,38 @@
 "use client";
 
 import { Lock, Send } from "lucide-react";
+import { useState } from "react";
 
 interface CommentInputProps {
   isLoggedIn: boolean;
-  value: string;
-  onChange: (value: string) => void;
-  onSubmit: () => void;
+  onSubmit: (
+        comment: string,
+        parentCommentId?: number | null
+    ) => Promise<void>;
   onAuthRequired: () => void;
+  submitting: boolean;
 }
 
 export default function CommentInput({
   isLoggedIn,
-  value,
-  onChange,
   onSubmit,
   onAuthRequired,
+  submitting,
 }: CommentInputProps) {
+
+  const [value, setValue] = useState("");
+
+  const handleSubmit = async () => {
+    if (!value.trim() || submitting)
+        return;
+    try {
+        await onSubmit(value);
+        setValue("");
+    } catch (error) {
+        console.error(error);
+    }
+};
+console.log("commentinput rendered")
   return (
     <div
       className="flex-shrink-0 border-t px-4 py-3"
@@ -28,11 +44,11 @@ export default function CommentInput({
         <div className="flex items-end gap-2">
           <textarea
             value={value}
-            onChange={(e) => onChange(e.target.value)}
+            onChange={(e) => setValue(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();
-                onSubmit();
+                handleSubmit();
               }
             }}
             placeholder="Add a comment…"
@@ -47,18 +63,22 @@ export default function CommentInput({
           />
 
           <button
-            onClick={onSubmit}
-            disabled={!value.trim()}
-            className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl disabled:opacity-30"
-            style={{
-              background: "#6366f1",
-            }}
-          >
-            <Send
-              size={14}
-              className="text-white"
-            />
-          </button>
+  onClick={handleSubmit}
+  disabled={!value.trim() || submitting}
+  className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl disabled:opacity-30 disabled:cursor-not-allowed"
+  style={{
+    background: "#6366f1",
+  }}
+>
+  {submitting ? (
+    <span className="text-xs text-white">...</span>
+  ) : (
+    <Send
+      size={14}
+      className="text-white"
+    />
+  )}
+</button>
         </div>
       ) : (
         <button

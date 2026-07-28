@@ -14,7 +14,17 @@ interface CommentsState {
     loadComments: (
     memeId: number,
     force?: boolean
+    ) => Promise<void>;
+    createComment: (
+        memeId: number,
+        commentText: string,
+        parentCommentId?: number | null
+    ) => Promise<void>;
+    deleteComment: (
+    memeId: number,
+    commentId: number
 ) => Promise<void>;
+
 }
 
 export const useCommentsStore =
@@ -76,6 +86,85 @@ create<CommentsState>((set,get) => ({
         }));
     }
 },
+createComment: async (
+    memeId,
+    commentText,
+    parentCommentId = null
+) => {
+    set((state) => ({
+        submittingByMeme: {
+            ...state.submittingByMeme,
+            [memeId]: true,
+        },
+    }));
+    try { const result = await commentsService.createComment({
+            memeId,
+            commentText,
+            parentCommentId,
+        });
+        set((state) => {const page =state.commentsByMeme[memeId];
+    if (!page) {
+        return state;
+    }
+    const updatedPage = {
+        ...page,
+        comments: [
+            ...page.comments,
+            result.comment,
+        ],
+        totalComments:
+            result.commentsCount,
+    };
+    return {
+        commentsByMeme: {
+            ...state.commentsByMeme,
+            [memeId]: updatedPage,
+        },
+    };
+});
+    console.log("CREATE RESULT", result);
+} finally {
+    set((state) => ({
+        submittingByMeme: {
+            ...state.submittingByMeme,
+            [memeId]: false,
+        },
+    }));
+
+}
+},
+
+deleteComment: async (
+    memeId,
+    commentId
+) => {
+ await commentsService.deleteComment({
+        commentId,
+    });
+    set((state) => {
+    const page =
+        state.commentsByMeme[memeId];
+    if (!page) {
+        return state;
+    }
+    const updatedPage = {
+        ...page,
+        comments: page.comments.filter(
+            (comment) => comment.id !== commentId
+        ),
+        totalComments: Math.max(  0,
+            page.totalComments - 1
+        ),
+    };
+    return {
+        commentsByMeme: {
+            ...state.commentsByMeme,
+            [memeId]: updatedPage,
+        },
+    };
+});
+},
+
     
 }));
 

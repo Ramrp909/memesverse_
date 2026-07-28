@@ -25,11 +25,18 @@ export interface GetCommentsResponse {
 
 export interface CreateCommentResponse {
   status: string;
-  comment: CommentResponse;
+  comment: CreateCommentItemResponse;
   comments_count: number;
 }
 
 export interface DeleteCommentResponse {
   status: string;
   message: string;
+}
+
+export interface CreateCommentItemResponse {
+  id: number;
+  comment_text: string;
+  user_name: string;
+  profile_pic: string | null;
 }

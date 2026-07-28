@@ -16,6 +16,15 @@ export function useComments(memeId: number) {
     const loadComments = useCommentsStore(
         state => state.loadComments
     );
+    const createComment = useCommentsStore(
+    state => state.createComment
+);
+
+const deleteComment =
+    useCommentsStore(
+        (state) => state.deleteComment
+    );
+
     return {
         comments: commentsPage?.comments ?? [],
         totalComments: commentsPage?.totalComments ?? 0,
@@ -25,6 +34,18 @@ export function useComments(memeId: number) {
         submitting,
         loadComments: (force = false) =>
             loadComments(memeId, force),
+        createComment: (
+    commentText: string,
+    parentCommentId?: number | null
+) =>
+    createComment(
+        memeId,
+        commentText,
+        parentCommentId
+    ),
+    deleteComment: (commentId: number) =>
+    deleteComment(memeId, commentId),
     };
+    
 
 }

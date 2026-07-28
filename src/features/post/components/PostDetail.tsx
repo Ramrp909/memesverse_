@@ -21,26 +21,26 @@ import { useComments } from "@/features/comments/hooks/useComments";
 interface Props {
   post: FeedItem | null;
   open: boolean;
-
   isLoggedIn?: boolean;
-
   onClose: () => void;
   onAuthRequired?: () => void;
   onShare?: () => void;
+  submitting: boolean;
 }
 
 export function PostDetail({
   post,
   open,
   isLoggedIn,
+  submitting,
   onClose,
   onAuthRequired,
   onShare,
 }: Props) {
  
 
-  const [commentText, setCommentText] =
-    useState("");
+  // const [commentText, setCommentText] =
+  //   useState("");
 
   const [showToast, setShowToast] =
     useState(false);
@@ -50,20 +50,22 @@ const {
     comments,
     loading,
     loadComments,
+    createComment,
+    deleteComment,
 } = useComments(post?.id ?? 0);
 
 console.log({
     comments,
     count: comments.length,
 });
-useEffect(() => {
 
+console.log("postDetail rendered")
+
+useEffect(() => {
     if (!open || !post) {
         return;
     }
-
     loadComments();
-
 }, [open, post?.id]);
 
   useEffect(() => {
@@ -105,24 +107,31 @@ useEffect(() => {
     }, 1800);
   }
 
-  function submitComment() {
-    if (!commentText.trim()) return;
+//   function submitComment() {
+//     if (!commentText.trim()) return;
 
-    // setComments((prev) => [
-    //   ...prev,
-    //   {
-    //     id: Date.now(),
-    //     user: "You",
-    //     avatar:
-    //       "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=64",
-    //     text: commentText,
-    //     time: "Just now",
-    //     likes: 0,
-    //   },
-    // ]);
-console.log(commentText)
-    setCommentText("");
-  }
+//     // setComments((prev) => [
+//     //   ...prev,
+//     //   {
+//     //     id: Date.now(),
+//     //     user: "You",
+//     //     avatar:
+//     //       "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=64",
+//     //     text: commentText,
+//     //     time: "Just now",
+//     //     likes: 0,
+//     //   },
+//     // ]);
+// console.log(commentText)
+//     setCommentText("");
+//   }
+// async function submitComment() {
+//     if (!commentText.trim()) {
+//         return;
+//     }
+//     await createComment(commentText);
+//     setCommentText("");
+// }
 
   return (
     <div
@@ -232,16 +241,17 @@ console.log(commentText)
 
           <CommentList
             comments={comments}
+            onDeleteComment={deleteComment}
           />
 
           <CommentInput
             isLoggedIn={isAuthenticated}
-            value={commentText}
-            onChange={setCommentText}
-            onSubmit={submitComment}
+            onSubmit={createComment}
+            submitting={submitting}
             onAuthRequired={
               onAuthRequired ??
               (() => {})
+              
             }
           />
           </div>

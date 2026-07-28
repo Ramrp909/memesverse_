@@ -15,6 +15,7 @@ import type { FeedItem } from "@/features/feed/types/feed.model";
 import { formatNumber } from "@/shared/utils/number";
 import { useInteraction } from "@/features/interactions/hooks";
 import { useAuth } from "@/features/auth/hooks/useAuth";
+import { useComments } from "@/features/comments/hooks/useComments";
 
 
 interface PostActionsProps {
@@ -34,11 +35,12 @@ export default function PostActions({
 }: PostActionsProps) {
   const [disliked, setDisliked] = useState(false);
 const { isAuthenticated } = useAuth();
-
+const {
+    comments,
+} = useComments(post?.id ?? 0);
  const {
   liked,
   likes,
-  comments,
   views,
   bookmarks,
   bookmarked,
@@ -47,7 +49,6 @@ const { isAuthenticated } = useAuth();
   share,
 } = useInteraction(post.id, {
   likes: post.likes,
-  comments: 0,
   views: post.views,
   bookmarks: post.bookmarks,
   shares: post.shares,
@@ -165,7 +166,7 @@ const { isAuthenticated } = useAuth();
         >
           <MessageCircle size={13} />
 
-          <span>{comments}</span>
+          <span>{comments.length}</span>
         </button>
 
         <div

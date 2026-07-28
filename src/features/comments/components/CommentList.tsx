@@ -1,15 +1,20 @@
 "use client";
 
-import { ThumbsUp } from "lucide-react";
+import { DeleteIcon, ThumbsUp } from "lucide-react";
 import type { Comment } from "../types/comment";
+import { useComments } from "../hooks/useComments";
 
 interface CommentListProps {
   comments: Comment[];
+  onDeleteComment:(commentId: number) => void;
 }
+
 
 export default function CommentList({
   comments,
+  onDeleteComment,
 }: CommentListProps) {
+  
   return (
     <div className="flex-1 overflow-y-auto px-4 py-3 space-y-4">
       {comments.map((comment) => (
@@ -18,7 +23,7 @@ export default function CommentList({
           className="flex gap-3"
         >
           <img
-            src={comment.user.avatar}
+            src={comment.user.avatar || "https://ui-avatars.com/api/?name=" + encodeURIComponent(comment.user.name)}
             alt={comment.user.name}
             className="mt-0.5 h-7 w-7 flex-shrink-0 rounded-full object-cover"
           />
@@ -55,8 +60,9 @@ export default function CommentList({
             >
               {comment.text}
             </p>
-
-            <button
+            <div
+            className="flex gap-3">
+              <button
               className="mt-1 flex items-center gap-1 text-[10px]"
               style={{
                 color: "var(--mv-text-muted)",
@@ -68,6 +74,20 @@ export default function CommentList({
                 ? comment.likes
                 : "Like"}
             </button>
+            <button
+            onClick={() => onDeleteComment(comment.id)}
+              className="mt-1 flex items-center gap-1 text-[10px]"
+              style={{
+                color: "var(--mv-text-muted)",
+              }}
+            >
+              <DeleteIcon size={9} />
+
+              {"Delete"}
+            </button>
+            </div>
+            
+
           </div>
         </div>
       ))}
